@@ -1,0 +1,25 @@
+apiVersion: minio.robotinfra.com/v1alpha1
+kind: MinioBucket
+metadata:
+  name: example-miniobucket
+spec:
+  name: mybucket
+  policy: |
+    {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Action": [
+            "s3:GetObject"
+          ],
+          "Effect": "Allow",
+          "Principal": {
+            "AWS": ["*"]
+          },
+          "Resource": [
+            "arn:aws:s3:::mybucket/*"
+          ],
+          "Sid": ""
+        }
+      ]
+    }

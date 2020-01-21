@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minio-resources-operator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: minio-resources-operator
+  template:
+    metadata:
+      labels:
+        name: minio-resources-operator
+    spec:
+      serviceAccountName: minio-resources-operator
+      containers:
+        - name: minio-resources-operator
+          image: robotinfra/minio-resources-operator:v0.1
+          command:
+            - minio-resources-operator
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: WATCH_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: OPERATOR_NAME
+              value: "minio-resources-operator"
+            - name: MINIO_HOSTNAME
+              value: "SET ME" # play.minio.io
+            - name: MINIO_ACCESSKEY
+              value: "SET ME"
+            - name: MINIO_SECRETKEY
+              value: "SET ME"
+            - name: MINIO_SSL
+              value: "true" # true=https false=http

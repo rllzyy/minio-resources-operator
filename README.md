@@ -1,6 +1,6 @@
 # Minio Resources Operator
 
-Kubernetes Operator that manage resource on a Minio server.
+Kubernetes Operator that manage buckets and users on a Minio server.
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/robotinfra/minio-resources-operator.svg?maxAge=604800)](https://hub.docker.com/r/robotinfra/minio-resources-operator)
 

@@ -2,6 +2,8 @@
 
 Kubernetes Operator that manage resource on a Minio server.
 
+[![Docker Pulls](https://img.shields.io/docker/pulls/robotinfra/minio-resources-operator.svg?maxAge=604800)](https://hub.docker.com/r/robotinfra/minio-resources-operator)
+
 ## Develop
 
 - Open directory in [VSCode as a container](https://code.visualstudio.com/docs/remote/containers).
@@ -20,7 +22,7 @@ Install operator (look in `deploy` directory):
 - `role.yaml`
 - `service_account.yaml`
 
-Soon a Helm chart is coming.
+A Helm chart is coming soon.
 
 ## Usage
 

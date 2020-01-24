@@ -26,10 +26,4 @@ A Helm chart is coming soon.
 
 ## Usage
 
-Create bucket and user using CR. Look at:
-
-- `deploy/crds/minio.robotinfra.com_v1alpha1_miniobucket_cr.yaml`
-- `deploy/crds/minio.robotinfra.com_v1alpha1_miniouser_cr.yaml`
-- `deploy/crds/minio.robotinfra.com_v1alpha1_minioserver_cr.yaml`
-
-for example.
+Create bucket and user using CR. Look at `.devcontainer/crs/*.yaml` for examples.

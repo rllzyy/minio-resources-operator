@@ -1,0 +1,44 @@
+# nodeSelector: {}
+# tolerations: {}
+# securityContext: {}
+
+image:
+  repository: robotinfra/minio-resources-operator
+  tag: v0.2
+  pullPolicy: IfNotPresent
+  pullSecrets: []
+
+replicas: 1
+
+rbac:
+  create: true
+  version: v1
+
+serviceMonitor:
+  enabled: true
+  # labels:
+  # namespace:
+  # interval:
+
+resources:
+  limits:
+    memory: 64Mi
+  requests:
+    cpu: 0.01
+    memory: 48Mi
+
+livenessProbe:
+  enabled: false
+  initialDelaySeconds: 0
+  periodSeconds: 10
+  timeoutSeconds: 1
+  successThreshold: 1
+  failureThreshold: 3
+
+readinessProbe:
+  enabled: false
+  initialDelaySeconds: 0
+  periodSeconds: 10
+  timeoutSeconds: 1
+  successThreshold: 1
+  failureThreshold: 3

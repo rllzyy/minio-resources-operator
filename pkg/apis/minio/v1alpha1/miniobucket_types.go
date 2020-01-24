@@ -6,14 +6,13 @@ import (
 
 // MinioBucketSpec defines the desired state of MinioBucket
 type MinioBucketSpec struct {
+	Server string `json:"server"`
 	Name   string `json:"name"`
 	Policy string `json:"policy,omitempty"`
 }
 
 // MinioBucketStatus defines the observed state of MinioBucket
 type MinioBucketStatus struct {
-	Created          bool `json:"created"`
-	PolicyConfigured bool `json:"policyConfigured"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

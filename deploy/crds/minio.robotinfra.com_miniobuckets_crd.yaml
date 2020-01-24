@@ -35,19 +35,14 @@ spec:
               type: string
             policy:
               type: string
+            server:
+              type: string
           required:
           - name
+          - server
           type: object
         status:
           description: MinioBucketStatus defines the observed state of MinioBucket
-          properties:
-            created:
-              type: boolean
-            policyConfigured:
-              type: boolean
-          required:
-          - created
-          - policyConfigured
           type: object
       type: object
   version: v1alpha1

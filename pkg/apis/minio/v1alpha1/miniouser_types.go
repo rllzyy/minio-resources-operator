@@ -6,6 +6,7 @@ import (
 
 // MinioUserSpec defines the desired state of MinioUser
 type MinioUserSpec struct {
+	Server    string `json:"server"`
 	AccessKey string `json:"accessKey"`
 	SecretKey string `json:"secretKey"`
 	Policy    string `json:"policy,omitempty"`
@@ -13,8 +14,6 @@ type MinioUserSpec struct {
 
 // MinioUserStatus defines the observed state of MinioUser
 type MinioUserStatus struct {
-	Created          bool `json:"created"`
-	PolicyConfigured bool `json:"policyConfigured"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

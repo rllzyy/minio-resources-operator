@@ -30,5 +30,6 @@ Create bucket and user using CR. Look at:
 
 - `deploy/crds/minio.robotinfra.com_v1alpha1_miniobucket_cr.yaml`
 - `deploy/crds/minio.robotinfra.com_v1alpha1_miniouser_cr.yaml`
+- `deploy/crds/minio.robotinfra.com_minioservers_crd.yaml`
 
 for example.

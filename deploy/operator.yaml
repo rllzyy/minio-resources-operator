@@ -30,11 +30,3 @@ spec:
                   fieldPath: metadata.name
             - name: OPERATOR_NAME
               value: "minio-resources-operator"
-            - name: MINIO_HOSTNAME
-              value: "SET ME" # play.minio.io
-            - name: MINIO_ACCESSKEY
-              value: "SET ME"
-            - name: MINIO_SECRETKEY
-              value: "SET ME"
-            - name: MINIO_SSL
-              value: "true" # true=https false=http

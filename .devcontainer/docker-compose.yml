@@ -28,11 +28,4 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     command: /bin/sleep 99999h
     environment:
-      # for mc
       MC_HOST_test: http://admin:testtest@minio:9000
-      # for operator
-      MINIO_SSL: "false"
-      MINIO_PORT: "9000"
-      MINIO_HOSTNAME: minio
-      MINIO_ACCESSKEY: admin
-      MINIO_SECRETKEY: testtest

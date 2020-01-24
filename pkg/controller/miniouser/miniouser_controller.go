@@ -16,7 +16,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/source"
 
 	miniov1alpha1 "github.com/robotinfra/minio-resources-operator/pkg/apis/minio/v1alpha1"
-	config "github.com/robotinfra/minio-resources-operator/pkg/config"
+	"github.com/robotinfra/minio-resources-operator/pkg/controller/minioserver"
 	"github.com/robotinfra/minio-resources-operator/pkg/utils"
 )
 
@@ -83,8 +83,13 @@ func (r *ReconcileMinioUser) Reconcile(request reconcile.Request) (reconcile.Res
 		return reconcile.Result{}, fmt.Errorf("r.client.Get: %w", err)
 	}
 
+	minioServer := minioserver.GetMinioServer(instance.Spec.Server)
+	if minioServer == nil {
+		return reconcile.Result{}, fmt.Errorf("Server %s don't exists", instance.Spec.Server)
+	}
+
 	// doc is https://github.com/minio/minio/tree/master/pkg/madmin
-	minioAdminClient, err := madmin.New(config.RuntimeServerConfiguration.GetHostname(), config.RuntimeServerConfiguration.AccessKey, config.RuntimeServerConfiguration.SecretKey, config.RuntimeServerConfiguration.SSL)
+	minioAdminClient, err := madmin.New(minioServer.GetHostname(), minioServer.AccessKey, minioServer.SecretKey, minioServer.SSL)
 	if err != nil {
 		return reconcile.Result{}, fmt.Errorf("madmin.New: %w", err)
 	}

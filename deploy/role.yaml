@@ -73,6 +73,7 @@ rules:
   - miniousers
   - miniopolicies
   - miniouserpolicies
+  - minioservers
   verbs:
   - create
   - delete

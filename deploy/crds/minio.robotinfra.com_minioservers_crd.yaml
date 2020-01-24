@@ -1,20 +1,20 @@
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
-  name: miniousers.minio.robotinfra.com
+  name: minioservers.minio.robotinfra.com
 spec:
   group: minio.robotinfra.com
   names:
-    kind: MinioUser
-    listKind: MinioUserList
-    plural: miniousers
-    singular: miniouser
+    kind: MinioServer
+    listKind: MinioServerList
+    plural: minioservers
+    singular: minioserver
   scope: Namespaced
   subresources:
     status: {}
   validation:
     openAPIV3Schema:
-      description: MinioUser is the Schema for the miniousers API
+      description: MinioServer is the Schema for the minioservers API
       properties:
         apiVersion:
           description: 'APIVersion defines the versioned schema of this representation
@@ -29,23 +29,31 @@ spec:
         metadata:
           type: object
         spec:
-          description: MinioUserSpec defines the desired state of MinioUser
+          description: MinioServerSpec defines the desired state of MinioServer
           properties:
             accessKey:
               type: string
-            policy:
+            hostname:
               type: string
+            port:
+              type: integer
             secretKey:
               type: string
-            server:
-              type: string
+            ssl:
+              type: boolean
           required:
           - accessKey
+          - hostname
+          - port
           - secretKey
-          - server
           type: object
         status:
-          description: MinioUserStatus defines the observed state of MinioUser
+          description: MinioServerStatus defines the observed state of MinioServer
+          properties:
+            online:
+              type: boolean
+          required:
+          - online
           type: object
       type: object
   version: v1alpha1

@@ -4,6 +4,7 @@ metadata:
   name: example-miniobucket
 spec:
   name: mybucket
+  server: dev-minioserver
   policy: |
     {
       "Version": "2012-10-17",

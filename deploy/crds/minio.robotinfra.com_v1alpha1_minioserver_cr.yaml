@@ -1,0 +1,10 @@
+apiVersion: minio.robotinfra.com/v1alpha1
+kind: MinioServer
+metadata:
+  name: dev-minioserver
+spec:
+  hostname: minio
+  port: 9000
+  accessKey: admin
+  secretKey: testtest
+  ssl: false

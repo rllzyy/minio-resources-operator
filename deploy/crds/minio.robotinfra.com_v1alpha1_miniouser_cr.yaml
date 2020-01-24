@@ -3,6 +3,7 @@ kind: MinioUser
 metadata:
   name: example-miniouser
 spec:
+  server: dev-minioserver
   accessKey: myUsername
   secretKey: mySecurePassword
   policy: |
@@ -15,8 +16,8 @@ spec:
           ],
           "Effect": "Allow",
           "Resource": [
-            "arn:aws:s3:::MyBucket/*",
-            "arn:aws:s3:::MyBucket"
+            "arn:aws:s3:::mybucket/*",
+            "arn:aws:s3:::mybucket"
           ],
           "Sid": ""
         }

@@ -15,6 +15,9 @@ ENV OPERATOR_NAME "minio-resources-operator"
 RUN apk add --no-cache \
       vim \
       htop \
+      gcc \
+      musl-dev \
+      linux-headers \
       git && \
     go get -v golang.org/x/tools/gopls && \
     go get -u -v github.com/ramya-rao-a/go-outline && \

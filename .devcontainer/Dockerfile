@@ -17,6 +17,7 @@ RUN apk add --no-cache \
       htop \
       gcc \
       musl-dev \
+      openssh-client \
       linux-headers \
       git && \
     go get -v golang.org/x/tools/gopls && \

@@ -12,6 +12,12 @@
 
 ### Bug Fixes
 
+## 0.3.1
+
+### Bug Fixes
+
+- Fix metrics initialization.
+
 ## 0.3
 
 ### Added

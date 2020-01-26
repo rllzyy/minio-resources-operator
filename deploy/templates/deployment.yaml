@@ -42,7 +42,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
             - name: OPERATOR_NAME
-              value: minio-resources-operator
+              value: {{ .Release.Name }}
           resources: {{ toYaml .Values.resources | nindent 12 }}
 {{- if .Values.livenessProbe.enabled }}
           livenessProbe:

@@ -18,10 +18,10 @@ serviceAccount:
 
 rbac:
   create: true
-  version: v1
+  apiVersion: v1
 
 serviceMonitor:
-  enabled: true
+  enabled: false
   # labels:
   # namespace:
   # interval:

@@ -4,11 +4,17 @@
 
 image:
   repository: robotinfra/minio-resources-operator
-  tag: v0.2
+  tag: v0.3
   pullPolicy: IfNotPresent
   pullSecrets: []
 
 replicas: 1
+
+# fullnameOverride:
+# nameOverride:
+serviceAccount:
+  create: true
+  name: ""
 
 rbac:
   create: true

@@ -5,7 +5,7 @@ metadata:
   name: {{ template "minio-operator.fullname" . }}
 subjects:
   - kind: ServiceAccount
-    name: {{ include "nginx.serviceAccountName" . }}
+    name: {{ include "minio-operator.serviceAccountName" . }}
 roleRef:
   kind: ClusterRole
   name: {{ template "minio-operator.fullname" . }}

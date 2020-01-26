@@ -9,7 +9,7 @@ spec:
     listKind: MinioServerList
     plural: minioservers
     singular: minioserver
-  scope: Namespaced
+  scope: Cluster
   subresources:
     status: {}
   validation:

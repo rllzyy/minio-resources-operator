@@ -9,13 +9,6 @@ import (
 	"runtime"
 
 	// Import all Kubernetes client auth plugins (e.g. Azure, GCP, OIDC, etc.)
-	_ "k8s.io/client-go/plugin/pkg/client/auth"
-	"k8s.io/client-go/rest"
-
-	"github.com/robotinfra/minio-resources-operator/pkg/apis"
-	"github.com/robotinfra/minio-resources-operator/pkg/controller"
-	"github.com/robotinfra/minio-resources-operator/version"
-
 	"github.com/operator-framework/operator-sdk/pkg/k8sutil"
 	kubemetrics "github.com/operator-framework/operator-sdk/pkg/kube-metrics"
 	"github.com/operator-framework/operator-sdk/pkg/leader"
@@ -25,10 +18,16 @@ import (
 	"github.com/spf13/pflag"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
+	_ "k8s.io/client-go/plugin/pkg/client/auth"
+	"k8s.io/client-go/rest"
 	"sigs.k8s.io/controller-runtime/pkg/client/config"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 	"sigs.k8s.io/controller-runtime/pkg/manager/signals"
+
+	"github.com/robotinfra/minio-resources-operator/pkg/apis"
+	"github.com/robotinfra/minio-resources-operator/pkg/controller"
+	"github.com/robotinfra/minio-resources-operator/version"
 )
 
 // Change below variables to serve metrics on different host or port.
@@ -115,6 +114,10 @@ func main() {
 	}
 
 	// Add the Metrics Service
+	if namespace, err = k8sutil.GetOperatorNamespace(); err != nil {
+		log.Error(err, "")
+		os.Exit(1)
+	}
 	addMetrics(ctx, cfg, namespace)
 
 	log.Info("Starting the Cmd.")
@@ -173,12 +176,12 @@ func serveCRMetrics(cfg *rest.Config) error {
 		return err
 	}
 	// Get the namespace the operator is currently deployed in.
-	operatorNs, err := k8sutil.GetOperatorNamespace()
-	if err != nil {
-		return err
-	}
+	// operatorNs, err := k8sutil.GetOperatorNamespace()
+	// if err != nil {
+	// 	return err
+	// }
 	// To generate metrics in other namespaces, add the values below.
-	ns := []string{operatorNs}
+	ns := []string{""}
 	// Generate and serve custom resource specific metrics.
 	err = kubemetrics.GenerateAndServeCRMetrics(cfg, ns, filteredGVK, metricsHost, operatorMetricsPort)
 	if err != nil {

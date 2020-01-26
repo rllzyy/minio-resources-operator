@@ -25,6 +25,7 @@ services:
     volumes:
       - ../:/workspace
       - ~/.ssh:/root/.ssh:ro
+      - ~/.docker:/root/.docker:ro
       - /var/run/docker.sock:/var/run/docker.sock
     command: /bin/sleep 99999h
     environment:

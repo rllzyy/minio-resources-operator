@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minio-resources-operator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: minio-resources-operator
+  template:
+    metadata:
+      labels:
+        name: minio-resources-operator
+    spec:
+      serviceAccountName: minio-resources-operator
+      containers:
+        - name: minio-resources-operator
+          image: robotinfra/minio-resources-operator:v0.3
+          command:
+            - minio-resources-operator
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: WATCH_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: OPERATOR_NAME
+              value: "minio-resources-operator"

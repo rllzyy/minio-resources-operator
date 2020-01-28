@@ -9,7 +9,7 @@ COPY --from=hadolint-source /bin/hadolint /usr/local/bin/hadolint
 COPY --from=kubectl-source /opt/bitnami/kubectl/bin/kubectl /usr/local/bin/kubectl
 COPY --from=mc-source /usr/bin/mc /usr/local/bin/mc
 
-ENV WATCH_NAMESPACE "default"
+ENV WATCH_NAMESPACE ""
 ENV OPERATOR_NAME "minio-resources-operator"
 
 RUN apk add --no-cache \

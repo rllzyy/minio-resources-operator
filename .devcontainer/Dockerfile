@@ -49,6 +49,6 @@ RUN apk add --no-cache \
       /go/src/ \
       /go/pkg/ && \
     wget -O /usr/local/bin/operator-sdk \
-      https://github.com/operator-framework/operator-sdk/releases/download/v0.14.1/operator-sdk-v0.14.1-x86_64-linux-gnu && \
+      https://github.com/operator-framework/operator-sdk/releases/download/v0.15.1/operator-sdk-v0.15.1-x86_64-linux-gnu && \
     chmod 755 /usr/local/bin/operator-sdk && \
     mkdir -p /root/.kube

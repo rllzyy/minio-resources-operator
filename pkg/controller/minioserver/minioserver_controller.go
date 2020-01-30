@@ -27,12 +27,12 @@ var (
 const minioServerFinalizer = "finalizer.server.minio.robotinfra.com"
 
 // GetMinioServer if available, return a MinioServer that CR is present
-func GetMinioServer(name string) *miniov1alpha1.MinioServerSpec {
+func GetMinioServer(name string) *miniov1alpha1.MinioServer {
 	server, found := servers.Load(name)
 	if !found {
 		return nil
 	}
-	return server.(*miniov1alpha1.MinioServerSpec)
+	return server.(*miniov1alpha1.MinioServer)
 }
 
 // Add creates a new MinioServer Controller and adds it to the Manager. The Manager will set fields on the Controller
@@ -119,7 +119,7 @@ func (r *ReconcileMinioServer) Reconcile(request reconcile.Request) (reconcile.R
 		return reconcile.Result{}, nil
 	}
 
-	servers.Store(instance.ObjectMeta.Name, &instance.Spec)
+	servers.Store(instance.ObjectMeta.Name, &instance)
 
 	if !finalizerPresent {
 		reqLogger.Info("No finalizer, add it")

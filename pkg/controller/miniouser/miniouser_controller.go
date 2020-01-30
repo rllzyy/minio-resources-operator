@@ -9,6 +9,7 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/controller"
+	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 	"sigs.k8s.io/controller-runtime/pkg/handler"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
@@ -89,7 +90,7 @@ func (r *ReconcileMinioUser) Reconcile(request reconcile.Request) (reconcile.Res
 	}
 
 	// doc is https://github.com/minio/minio/tree/master/pkg/madmin
-	minioAdminClient, err := madmin.New(minioServer.GetHostname(), minioServer.AccessKey, minioServer.SecretKey, minioServer.SSL)
+	minioAdminClient, err := madmin.New(minioServer.Spec.GetHostname(), minioServer.Spec.AccessKey, minioServer.Spec.SecretKey, minioServer.Spec.SSL)
 	if err != nil {
 		return reconcile.Result{}, fmt.Errorf("madmin.New: %w", err)
 	}

@@ -93,7 +93,7 @@ func (r *ReconcileMinioBucket) Reconcile(request reconcile.Request) (reconcile.R
 	}
 
 	// doc is https://github.com/minio/minio/tree/master/pkg/madmin
-	minioClient, err := minio.New(minioServer.GetHostname(), minioServer.AccessKey, minioServer.SecretKey, minioServer.SSL)
+	minioClient, err := minio.New(minioServer.Spec.GetHostname(), minioServer.Spec.AccessKey, minioServer.Spec.SecretKey, minioServer.Spec.SSL)
 	if err != nil {
 		return reconcile.Result{}, fmt.Errorf("minio.New: %w", err)
 	}

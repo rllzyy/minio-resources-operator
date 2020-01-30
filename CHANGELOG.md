@@ -12,6 +12,17 @@
 
 ### Bug Fixes
 
+## 0.3.2
+
+### Added
+
+- Set k8s controller reference for user and bucket
+- Publish helm chart
+
+### Bug Fixes
+
+- Fix helm chart
+
 ## 0.3.1
 
 ### Bug Fixes

@@ -14,15 +14,9 @@ You can run operator by running task `Run Operator`.
 
 ## Installation
 
-Install operator (look in `deploy` directory):
+Install helm chart `minio-resources-operator` version `0.1.3` in repository `https://robotinfra-charts.sgp1.digitaloceanspaces.com/`.
 
-- `crds/*_crd.yaml`
-- `operator.yaml`
-- `role_binding.yaml`
-- `role.yaml`
-- `service_account.yaml`
-
-A Helm chart is in `deploy/`.
+Values can be found at `deploy/values.yaml`.
 
 ## Usage
 

@@ -15,7 +15,7 @@ spec:
       serviceAccountName: minio-resources-operator
       containers:
         - name: minio-resources-operator
-          image: robotinfra/minio-resources-operator:v0.3
+          image: robotinfra/minio-resources-operator:v0.3.2
           command:
             - minio-resources-operator
           imagePullPolicy: IfNotPresent

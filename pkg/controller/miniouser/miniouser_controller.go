@@ -7,6 +7,7 @@ import (
 	"github.com/minio/minio/pkg/madmin"
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/apimachinery/pkg/types"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/controller"
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
@@ -17,7 +18,6 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/source"
 
 	miniov1alpha1 "github.com/robotinfra/minio-resources-operator/pkg/apis/minio/v1alpha1"
-	"github.com/robotinfra/minio-resources-operator/pkg/controller/minioserver"
 	"github.com/robotinfra/minio-resources-operator/pkg/utils"
 )
 
@@ -84,9 +84,11 @@ func (r *ReconcileMinioUser) Reconcile(request reconcile.Request) (reconcile.Res
 		return reconcile.Result{}, fmt.Errorf("r.client.Get: %w", err)
 	}
 
-	minioServer := minioserver.GetMinioServer(instance.Spec.Server)
-	if minioServer == nil {
-		return reconcile.Result{}, fmt.Errorf("Server %s don't exists", instance.Spec.Server)
+	minioServer := &miniov1alpha1.MinioServer{}
+	if err := r.client.Get(context.TODO(), types.NamespacedName{
+		Name:      instance.Spec.Server,
+	}, minioServer); err != nil {
+		return reconcile.Result{}, fmt.Errorf("r.client.Get: %w", err)
 	}
 
 	// doc is https://github.com/minio/minio/tree/master/pkg/madmin

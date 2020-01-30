@@ -223,7 +223,7 @@ func (r *ReconcileMinioUser) Reconcile(request reconcile.Request) (reconcile.Res
 	if err = minioAdminClient.SetUser(instance.Spec.AccessKey, instance.Spec.SecretKey, madmin.AccountEnabled); err != nil {
 		return reconcile.Result{}, fmt.Errorf("minioAdminClient.SetUser: %w", err)
 	}
-	reqLogger.Info("Secret key set")
+	reqLogger.Info("Secret key set, reconcilied")
 
 	return reconcile.Result{}, nil
 }

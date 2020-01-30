@@ -130,5 +130,6 @@ func (r *ReconcileMinioServer) Reconcile(request reconcile.Request) (reconcile.R
 		reqLogger.Info("Finalizer added")
 	}
 
+	reqLogger.Info("MinioServer reconcilied")
 	return reconcile.Result{}, nil
 }

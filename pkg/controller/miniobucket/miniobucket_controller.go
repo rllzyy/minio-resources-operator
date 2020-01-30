@@ -178,5 +178,6 @@ func (r *ReconcileMinioBucket) Reconcile(request reconcile.Request) (reconcile.R
 		reqLogger.Info("Bucket policy set")
 	}
 
+	reqLogger.Info("MinioBucket reconcilied")
 	return reconcile.Result{}, nil
 }

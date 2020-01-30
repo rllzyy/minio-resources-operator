@@ -28,10 +28,10 @@ serviceMonitor:
 
 resources:
   limits:
-    memory: 64Mi
+    memory: 192Mi
   requests:
     cpu: 0.01
-    memory: 48Mi
+    memory: 128Mi
 
 livenessProbe:
   enabled: true

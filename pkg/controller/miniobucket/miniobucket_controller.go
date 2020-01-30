@@ -9,6 +9,7 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/controller"
+	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 	"sigs.k8s.io/controller-runtime/pkg/handler"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
@@ -133,6 +134,10 @@ func (r *ReconcileMinioBucket) Reconcile(request reconcile.Request) (reconcile.R
 			reqLogger.Info("Instance marked for deletion, but not minioBucketFinalizer")
 		}
 		return reconcile.Result{}, nil
+	}
+
+	if err := controllerutil.SetControllerReference(minioServer, instance, r.scheme); err != nil {
+		return reconcile.Result{}, fmt.Errorf("controllerutil.SetControllerReference: %w", err)
 	}
 
 	if !finalizerPresent {

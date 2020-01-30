@@ -155,6 +155,10 @@ func (r *ReconcileMinioUser) Reconcile(request reconcile.Request) (reconcile.Res
 		return reconcile.Result{}, nil
 	}
 
+	if err := controllerutil.SetControllerReference(minioServer, instance, r.scheme); err != nil {
+		return reconcile.Result{}, fmt.Errorf("controllerutil.SetControllerReference: %w", err)
+	}
+
 	if !finalizerPresent {
 		reqLogger.Info("No finalizer, add it")
 		instance.SetFinalizers(append(instance.GetFinalizers(), minioUserFinalizer))

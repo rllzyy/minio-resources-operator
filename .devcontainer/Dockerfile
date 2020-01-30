@@ -11,6 +11,7 @@ COPY --from=mc-source /usr/bin/mc /usr/local/bin/mc
 
 ENV WATCH_NAMESPACE ""
 ENV OPERATOR_NAME "minio-resources-operator"
+ENV DOCKER_DEVELOPMENT "1"
 
 RUN apk add --no-cache \
       vim \

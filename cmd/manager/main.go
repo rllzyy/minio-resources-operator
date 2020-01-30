@@ -114,11 +114,13 @@ func main() {
 	}
 
 	// Add the Metrics Service
-	if namespace, err = k8sutil.GetOperatorNamespace(); err != nil {
-		log.Error(err, "")
-		os.Exit(1)
+	if len(os.Getenv("DOCKER_DEVELOPMENT")) == 0 {
+		if namespace, err = k8sutil.GetOperatorNamespace(); err != nil {
+			log.Error(err, "")
+			os.Exit(1)
+		}
+		addMetrics(ctx, cfg, namespace)
 	}
-	addMetrics(ctx, cfg, namespace)
 
 	log.Info("Starting the Cmd.")
 

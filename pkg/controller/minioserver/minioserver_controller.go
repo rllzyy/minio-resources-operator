@@ -119,7 +119,7 @@ func (r *ReconcileMinioServer) Reconcile(request reconcile.Request) (reconcile.R
 		return reconcile.Result{}, nil
 	}
 
-	servers.Store(instance.ObjectMeta.Name, &instance)
+	servers.Store(instance.ObjectMeta.Name, instance)
 
 	if !finalizerPresent {
 		reqLogger.Info("No finalizer, add it")

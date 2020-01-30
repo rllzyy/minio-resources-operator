@@ -12,6 +12,12 @@
 
 ### Bug Fixes
 
+## 0.3.4
+
+### Changed
+
+- Simplify code, remove `MinioServer` controller
+
 ## 0.3.3
 
 ### Bug Fixes

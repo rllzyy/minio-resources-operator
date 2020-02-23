@@ -4,7 +4,7 @@
 
 image:
   repository: robotinfra/minio-resources-operator
-  tag: v0.3.4
+  tag: v0.3.5
   pullPolicy: IfNotPresent
   pullSecrets: []
 
@@ -28,10 +28,10 @@ serviceMonitor:
 
 resources:
   limits:
-    memory: 192Mi
+    memory: 256Mi
   requests:
     cpu: 0.01
-    memory: 128Mi
+    memory: 192Mi
 
 livenessProbe:
   enabled: true

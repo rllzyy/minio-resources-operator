@@ -1,32 +1,33 @@
----
+{{- $fullname := include "minio-operator.fullname" . -}}
+{{- $name := include "minio-operator.name" . }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "minio-operator.fullname" . }}
+  name: {{ $fullname }}
   labels:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: {{ template "minio-operator.name" . }}
+    app: {{ $name }}
     heritage: {{ .Release.Service }}
-    release: {{ .Release.Name }}
+    release: {{ .Release.Name | quote }}
 spec:
   strategy:
     type: Recreate
   selector:
     matchLabels:
-      app: {{ template "minio-operator.fullname" . }}
+      app: {{ $name }}
       release: {{ .Release.Name }}
   replicas: {{ .Values.replicas }}
   template:
     metadata:
-      name: {{ template "minio-operator.fullname" . }}
+      name: {{ $fullname }}
       labels:
-        app: {{ template "minio-operator.fullname" . }}
+        app: {{ $name }}
         release: {{ .Release.Name }}
       annotations: {{ toYaml .Values.podAnnotations | nindent 8 }}
     spec:
       serviceAccountName: {{ template "minio-operator.serviceAccountName" . }}
       containers:
-        - name: {{ template "minio-operator.fullname" . }}
+        - name: operator
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command:
@@ -35,7 +36,11 @@ spec:
             - debug
           ports:
             - containerPort: 8383
-              name: metrics
+              name: http-metrics
+              protocol: TCP
+            - containerPort: 8686
+              name: cr-metrics
+              protocol: TCP
           env:
             - name: WATCH_NAMESPACE
               value: ""

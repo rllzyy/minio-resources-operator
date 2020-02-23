@@ -7,7 +7,7 @@ require (
 	github.com/go-ini/ini v1.51.1 // indirect
 	github.com/minio/minio v0.0.0-20200121104658-e2b3c083aa46
 	github.com/minio/minio-go v6.0.14+incompatible
-	github.com/operator-framework/operator-sdk v0.15.1
+	github.com/operator-framework/operator-sdk v0.15.2
 	github.com/spf13/pflag v1.0.5
 	golang.org/x/crypto v0.0.0-20200117160349-530e935923ad // indirect
 	golang.org/x/net v0.0.0-20200114155413-6afb5195e5aa // indirect

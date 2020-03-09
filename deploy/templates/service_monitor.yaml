@@ -1,4 +1,4 @@
-{{- if .Values.serviceMonitor.enabled }}
+{{- if and .Values.serviceMonitor.enabled (.Capabilities.APIVersions.Has "monitoring.coreos.com/v1") }}
 {{- $fullname := include "minio-operator.fullname" . -}}
 {{- $name := include "minio-operator.name" . }}
 apiVersion: monitoring.coreos.com/v1

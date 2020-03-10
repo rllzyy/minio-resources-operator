@@ -1,4 +1,6 @@
-{{- if and .Values.serviceMonitor.enabled (.Capabilities.APIVersions.Has "monitoring.coreos.com/v1") }}
+{{- /* https://github.com/argoproj/argo-cd/issues/1251
+if and .Values.serviceMonitor.enabled (.Capabilities.APIVersions.Has "monitoring.coreos.com/v1") */ -}}
+{{- if .Values.serviceMonitor.enabled -}}
 {{- $fullname := include "minio-operator.fullname" . -}}
 {{- $name := include "minio-operator.name" . }}
 apiVersion: monitoring.coreos.com/v1

@@ -1,4 +1,4 @@
-module github.com/robotinfra/minio-resources-operator
+module github.com/Walkbase/minio-resources-operator
 
 go 1.13
 

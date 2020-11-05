@@ -16,8 +16,8 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 	"sigs.k8s.io/controller-runtime/pkg/source"
 
-	miniov1alpha1 "github.com/robotinfra/minio-resources-operator/pkg/apis/minio/v1alpha1"
-	"github.com/robotinfra/minio-resources-operator/pkg/utils"
+	miniov1alpha1 "github.com/Walkbase/minio-resources-operator/pkg/apis/minio/v1alpha1"
+	"github.com/Walkbase/minio-resources-operator/pkg/utils"
 )
 
 var log = logf.Log.WithName("controller_miniobucket")
@@ -88,7 +88,7 @@ func (r *ReconcileMinioBucket) Reconcile(request reconcile.Request) (reconcile.R
 
 	minioServer := &miniov1alpha1.MinioServer{}
 	if err := r.client.Get(context.TODO(), client.ObjectKey{
-		Name:      instance.Spec.Server,
+		Name: instance.Spec.Server,
 	}, minioServer); err != nil {
 		return reconcile.Result{}, fmt.Errorf("r.client.Get: %w", err)
 	}

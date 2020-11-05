@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"github.com/robotinfra/minio-resources-operator/pkg/controller/miniobucket"
+	"github.com/Walkbase/minio-resources-operator/pkg/controller/miniobucket"
 )
 
 func init() {

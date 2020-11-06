@@ -5,7 +5,7 @@ ENV OPERATOR=/usr/local/bin/minio-resources-operator \
     USER_NAME=minio-resources-operator
 
 # install operator binary
-COPY build/_output/bin/workspace ${OPERATOR}
+COPY build/_output/bin/minio-resources-operator ${OPERATOR}
 
 COPY build/bin /usr/local/bin
 RUN  /usr/local/bin/user_setup

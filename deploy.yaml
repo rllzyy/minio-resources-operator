@@ -133,7 +133,7 @@ spec:
       serviceAccountName: minio-resource-operator
       containers:
         - name: operator
-          image: "robotinfra/minio-resources-operator:v0.3.7"
+          image: "example.com/wb/minio-resources-operator:v0.3.7"
           imagePullPolicy: IfNotPresent
           command:
             - minio-resources-operator

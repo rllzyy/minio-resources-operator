@@ -4,8 +4,9 @@ metadata:
   name: minio-resources-operator
 build:
   artifacts:
-  - image: example.com/wb/minio-resource-operator
-    context: build
+  - image: example.com/wb/minio-resources-operator
+    docker:
+      dockerfile: build/Dockerfile
 deploy:
   kubectl:
     manifests:

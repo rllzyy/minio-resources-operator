@@ -155,7 +155,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
             - name: OPERATOR_NAME
-              value: mro
+              value: minio-resource-operator
           resources: 
             limits:
               memory: 256Mi

@@ -109,7 +109,6 @@ roleRef:
   kind: ClusterRole
   name: minio-resource-operator
   apiGroup: rbac.authorization.k8s.io
-  name: minio-resource-operator
 ---
 # Source: minio-resources-operator/templates/deployment.yaml
 apiVersion: apps/v1

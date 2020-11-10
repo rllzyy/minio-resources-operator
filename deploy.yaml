@@ -5,10 +5,7 @@ kind: ServiceAccount
 metadata:
   name: minio-resource-operator
   labels:
-    chart: minio-resources-operator-0.1.13
     app: minio-resources-operator
-    heritage: Helm
-    release: "mro"
 imagePullSecrets: 
   []
 ---
@@ -18,10 +15,7 @@ kind: ClusterRole
 metadata:
   name: minio-resource-operator
   labels:
-    chart: "minio-resources-operator-0.1.13"
     app: minio-resources-operator
-    heritage: Helm
-    release: mro
 rules:
   - apiGroups:
       - ""
@@ -123,26 +117,19 @@ kind: Deployment
 metadata:
   name: minio-resource-operator
   labels:
-    chart: "minio-resources-operator-0.1.13"
     app: minio-resources-operator
-    heritage: Helm
-    release: "mro"
 spec:
   strategy:
     type: Recreate
   selector:
     matchLabels:
       app: minio-resources-operator
-      release: mro
   replicas: 1
   template:
     metadata:
       name: minio-resource-operator
       labels:
         app: minio-resources-operator
-        release: mro
-      annotations: 
-        null
     spec:
       serviceAccountName: minio-resource-operator
       containers:

@@ -5,6 +5,7 @@ go 1.13
 require (
 	github.com/Azure/go-autorest v12.2.0+incompatible // indirect
 	github.com/go-ini/ini v1.51.1 // indirect
+	github.com/hashicorp/vault/api v1.0.4
 	github.com/minio/minio v0.0.0-20200121104658-e2b3c083aa46
 	github.com/minio/minio-go v6.0.14+incompatible
 	github.com/operator-framework/operator-sdk v0.15.2

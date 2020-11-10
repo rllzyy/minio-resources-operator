@@ -28,8 +28,8 @@ spec:
       serviceAccountName: {{ template "minio-operator.serviceAccountName" . }}
       containers:
         - name: operator
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          image: "{{ .Values.image }}"
+          imagePullPolicy: {{ .Values.zeimage.pullPolicy }}
           command:
             - minio-resources-operator
             - --zap-level

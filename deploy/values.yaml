@@ -2,7 +2,7 @@
 # tolerations: {}
 # securityContext: {}
 
-image:
+zeimage:
   repository: robotinfra/minio-resources-operator
   tag: v0.3.7
   pullPolicy: IfNotPresent

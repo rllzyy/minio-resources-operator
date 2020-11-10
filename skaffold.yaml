@@ -1,0 +1,16 @@
+apiVersion: skaffold/v2beta9
+kind: Config
+metadata:
+  name: derp
+build:
+  artifacts:
+  - image: example.com/wb/minio-resource-operator
+    docker:
+      dockerfile: build/Dockerfile
+deploy:
+  helm:
+    releases:
+    - name: derp
+      chartPath: deploy/
+      artifactOverrides:
+        image: example.com/wb/minio-resource-operator

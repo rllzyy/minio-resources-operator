@@ -1,0 +1,195 @@
+---
+# Source: minio-resources-operator/templates/service_account.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: mro-minio-resources-operat
+  labels:
+    chart: minio-resources-operator-0.1.13
+    app: minio-resources-operator
+    heritage: Helm
+    release: "mro"
+imagePullSecrets: 
+  []
+---
+# Source: minio-resources-operator/templates/cluster_role.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: mro-minio-resources-operat
+  labels:
+    chart: "minio-resources-operator-0.1.13"
+    app: minio-resources-operator
+    heritage: Helm
+    release: mro
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+      - services
+      - services/finalizers
+      - endpoints
+      - persistentvolumeclaims
+      - events
+      - configmaps
+      - secrets
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - apps
+    resources:
+      - deployments
+      - daemonsets
+      - replicasets
+      - statefulsets
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - monitoring.coreos.com
+    resources:
+      - servicemonitors
+    verbs:
+      - get
+      - create
+  - apiGroups:
+      - apps
+    resourceNames:
+      - minio-resources-operator
+    resources:
+      - deployments/finalizers
+    verbs:
+      - update
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+    verbs:
+      - get
+  - apiGroups:
+      - apps
+    resources:
+      - replicasets
+      - deployments
+    verbs:
+      - get
+  - apiGroups:
+      - minio.robotinfra.com
+    resources:
+      - "*"
+      - miniousers
+      - miniopolicies
+      - miniouserpolicies
+      - minioservers
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+---
+# Source: minio-resources-operator/templates/cluster_role_binding.yaml
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: mro-minio-resources-operat
+subjects:
+  - kind: ServiceAccount
+    name: mro-minio-resources-operat
+    namespace: default
+roleRef:
+  kind: ClusterRole
+  name: mro-minio-resources-operat
+  apiGroup: rbac.authorization.k8s.io
+  name: mro-minio-resources-operat
+---
+# Source: minio-resources-operator/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mro-minio-resources-operat
+  labels:
+    chart: "minio-resources-operator-0.1.13"
+    app: minio-resources-operator
+    heritage: Helm
+    release: "mro"
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: minio-resources-operator
+      release: mro
+  replicas: 1
+  template:
+    metadata:
+      name: mro-minio-resources-operat
+      labels:
+        app: minio-resources-operator
+        release: mro
+      annotations: 
+        null
+    spec:
+      serviceAccountName: mro-minio-resources-operat
+      containers:
+        - name: operator
+          image: "robotinfra/minio-resources-operator:v0.3.7"
+          imagePullPolicy: IfNotPresent
+          command:
+            - minio-resources-operator
+            - --zap-level
+            - debug
+          ports:
+            - containerPort: 8383
+              name: http-metrics
+              protocol: TCP
+            - containerPort: 8686
+              name: cr-metrics
+              protocol: TCP
+          env:
+            - name: WATCH_NAMESPACE
+              value: ""
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: OPERATOR_NAME
+              value: mro
+          resources: 
+            limits:
+              memory: 256Mi
+            requests:
+              cpu: 0.01
+              memory: 192Mi
+          livenessProbe:
+            httpGet:
+              path: /metrics
+              port: 8383
+            initialDelaySeconds: 2
+            periodSeconds: 10
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: 8383
+            initialDelaySeconds: 2
+            periodSeconds: 10
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 3

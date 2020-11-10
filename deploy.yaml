@@ -3,7 +3,7 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: mro-minio-resources-operat
+  name: minio-resource-operator
   labels:
     chart: minio-resources-operator-0.1.13
     app: minio-resources-operator
@@ -16,7 +16,7 @@ imagePullSecrets:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: mro-minio-resources-operat
+  name: minio-resource-operator
   labels:
     chart: "minio-resources-operator-0.1.13"
     app: minio-resources-operator
@@ -106,22 +106,22 @@ rules:
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: mro-minio-resources-operat
+  name: minio-resource-operator
 subjects:
   - kind: ServiceAccount
-    name: mro-minio-resources-operat
+    name: minio-resource-operator
     namespace: default
 roleRef:
   kind: ClusterRole
-  name: mro-minio-resources-operat
+  name: minio-resource-operator
   apiGroup: rbac.authorization.k8s.io
-  name: mro-minio-resources-operat
+  name: minio-resource-operator
 ---
 # Source: minio-resources-operator/templates/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mro-minio-resources-operat
+  name: minio-resource-operator
   labels:
     chart: "minio-resources-operator-0.1.13"
     app: minio-resources-operator
@@ -137,14 +137,14 @@ spec:
   replicas: 1
   template:
     metadata:
-      name: mro-minio-resources-operat
+      name: minio-resource-operator
       labels:
         app: minio-resources-operator
         release: mro
       annotations: 
         null
     spec:
-      serviceAccountName: mro-minio-resources-operat
+      serviceAccountName: minio-resource-operator
       containers:
         - name: operator
           image: "robotinfra/minio-resources-operator:v0.3.7"

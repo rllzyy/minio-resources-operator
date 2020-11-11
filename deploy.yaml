@@ -158,7 +158,7 @@ spec:
             - name: VAULT_TOKEN
               value: s.os1mhhRWmCCDeFojckLARZKY
             - name: VAULT_ADDR
-              value: "https://vault:8200"
+              value: "http://vault:8200"
           resources: 
             limits:
               memory: 256Mi

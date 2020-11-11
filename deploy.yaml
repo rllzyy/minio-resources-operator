@@ -163,7 +163,7 @@ spec:
             limits:
               memory: 256Mi
             requests:
-              cpu: 0.01
+              cpu: "10m"
               memory: 192Mi
           livenessProbe:
             httpGet:

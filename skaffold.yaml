@@ -5,8 +5,8 @@ metadata:
 build:
   artifacts:
   - image: example.com/wb/minio-resources-operator
-    docker:
-      dockerfile: build/Dockerfile
+    custom:
+      buildCommand: "operator-sdk build example.com/wb/minio-resources-operator"
 deploy:
   kubectl:
     manifests:

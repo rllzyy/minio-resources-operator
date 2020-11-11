@@ -6,7 +6,7 @@ build:
   artifacts:
   - image: example.com/wb/minio-resources-operator
     custom:
-      buildCommand: "operator-sdk build example.com/wb/minio-resources-operator"
+      buildCommand: "operator-sdk build $IMAGE"
 deploy:
   kubectl:
     manifests:

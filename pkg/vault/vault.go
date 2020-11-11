@@ -5,15 +5,17 @@ import (
 	"os"
 
 	"github.com/hashicorp/vault/api"
+	"github.com/minio/minio/pkg/auth"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 )
 
-var vaultClient api.Client
+var vaultClient *api.Client
 var log = logf.Log.WithName("vault")
 
-func VaultInit() {
+func init() {
 
-	vaultClient, err := api.NewClient(nil)
+	var err error
+	vaultClient, err = api.NewClient(nil)
 
 	if err != nil {
 		log.Error(err, err.Error())
@@ -30,7 +32,54 @@ func VaultInit() {
 
 }
 
-// Hello just prints a message and forces and init
-func Hello() {
-	fmt.Println("Hello")
+func hasCredentials(user string) bool {
+
+	logic := vaultClient.Logical()
+	s, err := logic.Read(fmt.Sprintf("minio/data/users/%s", user))
+
+	if err != nil {
+		panic(err)
+	}
+
+	if s != nil {
+		return true
+	}
+
+	return false
+}
+
+// GetCredentials bleh bleh bleh
+func GetCredentials(user string) (auth.Credentials, error) {
+	path := fmt.Sprintf("minio/data/users/%s", user)
+
+	if hasCredentials(user) {
+		secret, err := vaultClient.Logical().Read(path)
+
+		if err != nil {
+			panic(err)
+		}
+
+		m, ok := secret.Data["data"].(map[string]interface{})
+
+		if ok {
+			creds := auth.Credentials{
+				AccessKey: m["accessKey"].(string),
+				SecretKey: m["secretKey"].(string),
+			}
+
+			return creds, nil
+		}
+
+		return auth.Credentials{}, fmt.Errorf("bad secret data")
+
+	}
+
+	creds, err := auth.GetNewCredentials()
+
+	if err != nil {
+		panic(err)
+	}
+
+	return creds, nil
+
 }

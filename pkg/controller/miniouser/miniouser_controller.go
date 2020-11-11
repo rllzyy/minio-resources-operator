@@ -74,9 +74,6 @@ func (r *ReconcileMinioUser) Reconcile(request reconcile.Request) (reconcile.Res
 	reqLogger := log.WithValues("Request.Namespace", request.Namespace, "Request.Name", request.Name)
 	reqLogger.Info("Reconciling MinioUser")
 
-	vault.VaultInit()
-	vault.Hello()
-
 	// Fetch the MinioUser instance
 	instance := &miniov1alpha1.MinioUser{}
 	err := r.client.Get(context.TODO(), request.NamespacedName, instance)
@@ -108,6 +105,11 @@ func (r *ReconcileMinioUser) Reconcile(request reconcile.Request) (reconcile.Res
 	}
 	reqLogger.Info("Got user list")
 	existingUser, isUserExists := allUsers[instance.Spec.AccessKey]
+
+	vaultCreds, err := vault.GetCredentials(instance.Name)
+	reqLogger = reqLogger.WithValues("Minio.AccessKey", vaultCreds.AccessKey)
+	reqLogger = reqLogger.WithValues("Minio.AccessKey", vaultCreds.SecretKey)
+	reqLogger.Info("Got user crdentials")
 
 	userPolicyName := fmt.Sprintf("_generator_%s", instance.Spec.AccessKey)
 	reqLogger = reqLogger.WithValues("Minio.Policy", userPolicyName)

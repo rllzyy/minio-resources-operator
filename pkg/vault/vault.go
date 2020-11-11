@@ -20,11 +20,12 @@ func VaultInit() {
 		os.Exit(2)
 	}
 
+	// Check that Vault is responsive (todo: better check?)
 	if health, err := vaultClient.Sys().Health(); err == nil {
-		log.Info("Vault initialized, version: %s", health.Version)
+		log.Info("Vault initialized", "Vault.version", health.Version)
 	} else {
-		log.Error(err, "Buttbutt")
-		os.Exit(3)
+		log.Error(err, "Failed communicating with Vault")
+		os.Exit(1)
 	}
 
 }

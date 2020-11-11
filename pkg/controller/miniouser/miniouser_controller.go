@@ -19,6 +19,7 @@ import (
 
 	miniov1alpha1 "github.com/Walkbase/minio-resources-operator/pkg/apis/minio/v1alpha1"
 	"github.com/Walkbase/minio-resources-operator/pkg/utils"
+	"github.com/Walkbase/minio-resources-operator/pkg/vault"
 )
 
 var log = logf.Log.WithName("controller_miniouser")
@@ -73,6 +74,9 @@ func (r *ReconcileMinioUser) Reconcile(request reconcile.Request) (reconcile.Res
 	reqLogger := log.WithValues("Request.Namespace", request.Namespace, "Request.Name", request.Name)
 	reqLogger.Info("Reconciling MinioUser")
 
+	vault.VaultInit()
+	vault.Hello()
+
 	// Fetch the MinioUser instance
 	instance := &miniov1alpha1.MinioUser{}
 	err := r.client.Get(context.TODO(), request.NamespacedName, instance)
@@ -86,7 +90,7 @@ func (r *ReconcileMinioUser) Reconcile(request reconcile.Request) (reconcile.Res
 
 	minioServer := &miniov1alpha1.MinioServer{}
 	if err := r.client.Get(context.TODO(), types.NamespacedName{
-		Name:      instance.Spec.Server,
+		Name: instance.Spec.Server,
 	}, minioServer); err != nil {
 		return reconcile.Result{}, fmt.Errorf("r.client.Get: %w", err)
 	}

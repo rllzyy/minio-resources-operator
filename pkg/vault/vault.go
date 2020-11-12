@@ -92,6 +92,18 @@ func GetCredentials(user string) (auth.Credentials, error) {
 		panic(err)
 	}
 
+	data := make(map[string]interface{})
+	data["data"] = map[string]string{
+		"accessKey": creds.AccessKey,
+		"secretKey": creds.SecretKey,
+	}
+
+	_, err = vaultClient.Logical().Write(path, data)
+
+	if err != nil {
+		panic(err)
+	}
+
 	return creds, nil
 
 }

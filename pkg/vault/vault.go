@@ -33,8 +33,8 @@ func init() {
 
 }
 
-// GetCredentials fetches credentails for a user from Vault or generates new ones and saves
-// them to Vault if they do not yet exist.
+// GetCredentials fetches minio credentails for a user from Vault or generates
+// new ones and saves them to Vault if they do not yet exist.
 func GetCredentials(user string) (auth.Credentials, error) {
 	path := fmt.Sprintf("minio/data/users/%s", user)
 	secret, err := vaultClient.Logical().Read(path)

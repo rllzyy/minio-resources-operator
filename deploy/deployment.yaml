@@ -17,7 +17,7 @@ spec:
       labels:
         app: minio-resources-operator
     spec:
-      serviceAccountName: minio-resource-operator
+      serviceAccountName: minio-resources-operator
       containers:
         - name: operator
           image: "harbor.walkbase.com/library/minio-resources-operator"

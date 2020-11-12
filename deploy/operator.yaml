@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minio-resource-operator
+  labels:
+    app: minio-resources-operator
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: minio-resources-operator
+  replicas: 1
+  template:
+    metadata:
+      name: minio-resource-operator
+      labels:
+        app: minio-resources-operator
+    spec:
+      serviceAccountName: minio-resource-operator
+      containers:
+        - name: operator
+          image: "example.com/wb/minio-resources-operator:v0.3.7"
+          imagePullPolicy: IfNotPresent
+          command:
+            - minio-resources-operator
+            - --zap-level
+            - debug
+          ports:
+            - containerPort: 8383
+              name: http-metrics
+              protocol: TCP
+            - containerPort: 8686
+              name: cr-metrics
+              protocol: TCP
+          env:
+            - name: WATCH_NAMESPACE
+              value: ""
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: OPERATOR_NAME
+              value: minio-resource-operator
+          resources: 
+            limits:
+              memory: 256Mi
+            requests:
+              cpu: "10m"
+              memory: 192Mi
+          livenessProbe:
+            httpGet:
+              path: /metrics
+              port: 8383
+            initialDelaySeconds: 2
+            periodSeconds: 10
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: 8383
+            initialDelaySeconds: 2
+            periodSeconds: 10
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 3

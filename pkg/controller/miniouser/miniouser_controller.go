@@ -104,6 +104,9 @@ func (r *ReconcileMinioUser) Reconcile(request reconcile.Request) (reconcile.Res
 	}
 
 	vaultCreds, err := vault.GetCredentials(instance.Name)
+	if err != nil {
+		return reconcile.Result{}, fmt.Errorf("vaultCreds: %w", err)
+	}
 	reqLogger.Info("Got user credentials")
 
 	reqLogger.Info("List all Minio users")

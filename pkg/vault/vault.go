@@ -57,25 +57,25 @@ func GetCredentials(user string) (auth.Credentials, error) {
 		secret, err := vaultClient.Logical().Read(path)
 
 		if err != nil {
-			panic(err)
+			return auth.Credentials{}, err
 		}
 
 		m, ok := secret.Data["data"].(map[string]interface{})
 
 		if !ok {
-			panic("failed to read secret data")
+			return auth.Credentials{}, errors.New("failed to read secret data")
 		}
 
 		accessKey, ok := m["accessKey"].(string)
 
 		if !ok {
-			panic("no accesskey defined")
+			return auth.Credentials{}, errors.New("no accesskey defined")
 		}
 
 		secretKey, ok := m["secretKey"].(string)
 
 		if !ok {
-			panic("no secretkey defined")
+			return auth.Credentials{}, errors.New("no secretkey defined")
 		}
 
 		creds := auth.Credentials{
@@ -90,7 +90,7 @@ func GetCredentials(user string) (auth.Credentials, error) {
 	creds, err := auth.GetNewCredentials()
 
 	if err != nil {
-		panic(err)
+		return auth.Credentials{}, err
 	}
 
 	data := make(map[string]interface{})
@@ -102,7 +102,7 @@ func GetCredentials(user string) (auth.Credentials, error) {
 	_, err = vaultClient.Logical().Write(path, data)
 
 	if err != nil {
-		panic(err)
+		return auth.Credentials{}, err
 	}
 
 	return creds, nil

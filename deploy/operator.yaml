@@ -20,7 +20,7 @@ spec:
       serviceAccountName: minio-resource-operator
       containers:
         - name: operator
-          image: "example.com/wb/minio-resources-operator:v0.3.7"
+          image: "harbor.walkbase.com/library/minio-resources-operator"
           imagePullPolicy: IfNotPresent
           command:
             - minio-resources-operator

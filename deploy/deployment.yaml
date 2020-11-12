@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: minio-resource-operator
+  name: minio-resources-operator
   labels:
     app: minio-resources-operator
 spec:
@@ -13,7 +13,7 @@ spec:
   replicas: 1
   template:
     metadata:
-      name: minio-resource-operator
+      name: minio-resources-operator
       labels:
         app: minio-resources-operator
     spec:
@@ -41,7 +41,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
             - name: OPERATOR_NAME
-              value: minio-resource-operator
+              value: minio-resources-operator
           resources: 
             limits:
               memory: 256Mi

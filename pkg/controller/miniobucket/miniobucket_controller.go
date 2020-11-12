@@ -22,7 +22,7 @@ import (
 
 var log = logf.Log.WithName("controller_miniobucket")
 
-const minioBucketFinalizer = "finalizer.bucket.minio.robotinfra.com"
+const minioBucketFinalizer = "finalizer.bucket.minio.walkbase.com"
 
 // Add creates a new MinioBucket Controller and adds it to the Manager. The Manager will set fields on the Controller
 // and Start it when the Manager is Started.

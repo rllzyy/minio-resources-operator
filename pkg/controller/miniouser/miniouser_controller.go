@@ -24,7 +24,7 @@ import (
 
 var log = logf.Log.WithName("controller_miniouser")
 
-const minioUserFinalizer = "finalizer.user.minio.robotinfra.com"
+const minioUserFinalizer = "finalizer.user.minio.walkbase.com"
 
 // Add creates a new MinioUser Controller and adds it to the Manager. The Manager will set fields on the Controller
 // and Start it when the Manager is Started.

@@ -23,7 +23,7 @@ Values can be found at `deploy/values.yaml`.
 Create a `MinioServer`:
 
 ```yaml 
-apiVersion: minio.robotinfra.com/v1alpha1
+apiVersion: minio.walkbase.com/v1alpha1
 kind: MinioServer
 metadata:
   name: test
@@ -38,7 +38,7 @@ spec:
 Create a `MinioBucket`:
 
 ```yaml
-apiVersion: minio.robotinfra.com/v1alpha1
+apiVersion: minio.walkbase.com/v1alpha1
 kind: MinioBucket
 metadata:
   name: bucket
@@ -70,7 +70,7 @@ spec:
 Create a `MinioUser`:
 
 ```yaml
-apiVersion: minio.robotinfra.com/v1alpha1
+apiVersion: minio.walkbase.com/v1alpha1
 kind: MinioUser
 metadata:
   name: test

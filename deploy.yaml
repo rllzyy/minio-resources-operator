@@ -80,7 +80,7 @@ rules:
     verbs:
       - get
   - apiGroups:
-      - minio.robotinfra.com
+      - minio.walkbase.com
     resources:
       - "*"
       - miniousers

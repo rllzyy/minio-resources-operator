@@ -1,4 +1,4 @@
-apiVersion: minio.robotinfra.com/v1alpha1
+apiVersion: minio.walkbase.com/v1alpha1
 kind: MinioBucket
 metadata:
   name: example-miniobucket

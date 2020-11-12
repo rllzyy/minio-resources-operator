@@ -61,16 +61,28 @@ func GetCredentials(user string) (auth.Credentials, error) {
 
 		m, ok := secret.Data["data"].(map[string]interface{})
 
-		if ok {
-			creds := auth.Credentials{
-				AccessKey: m["accessKey"].(string),
-				SecretKey: m["secretKey"].(string),
-			}
-
-			return creds, nil
+		if !ok {
+			panic("failed to read secret data")
 		}
 
-		return auth.Credentials{}, fmt.Errorf("bad secret data")
+		accessKey, ok := m["accessKey"].(string)
+
+		if !ok {
+			panic("no accesskey defined")
+		}
+
+		secretKey, ok := m["secretKey"].(string)
+
+		if !ok {
+			panic("no secretkey defined")
+		}
+
+		creds := auth.Credentials{
+			AccessKey: accessKey,
+			SecretKey: secretKey,
+		}
+
+		return creds, nil
 
 	}
 

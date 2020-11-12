@@ -1,6 +1,7 @@
 package vault
 
 import (
+	"errors"
 	"fmt"
 	"os"
 
@@ -106,4 +107,45 @@ func GetCredentials(user string) (auth.Credentials, error) {
 
 	return creds, nil
 
+}
+
+// GetServerCredentials bleh bleh bleh
+func GetServerCredentials(server string) (auth.Credentials, error) {
+	path := fmt.Sprintf("minio/data/servers/%s", server)
+	secret, err := vaultClient.Logical().Read(path)
+
+	if err != nil {
+		return auth.Credentials{}, err
+	}
+
+	if secret != nil {
+
+		m, ok := secret.Data["data"].(map[string]interface{})
+
+		if !ok {
+			return auth.Credentials{}, errors.New("failed to read secret data")
+		}
+
+		accessKey, ok := m["accessKey"].(string)
+
+		if !ok {
+			return auth.Credentials{}, errors.New("no accesskey defined")
+		}
+
+		secretKey, ok := m["secretKey"].(string)
+
+		if !ok {
+			return auth.Credentials{}, errors.New("no secretkey defined")
+		}
+
+		creds := auth.Credentials{
+			AccessKey: accessKey,
+			SecretKey: secretKey,
+		}
+
+		return creds, nil
+
+	}
+
+	return auth.Credentials{}, errors.New("no credentials for server")
 }

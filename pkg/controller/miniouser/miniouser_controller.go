@@ -92,8 +92,13 @@ func (r *ReconcileMinioUser) Reconcile(request reconcile.Request) (reconcile.Res
 		return reconcile.Result{}, fmt.Errorf("r.client.Get: %w", err)
 	}
 
+	serverCreds, err := vault.GetServerCredentials(minioServer.Name)
+	if err != nil {
+		return reconcile.Result{}, fmt.Errorf("failed to get server creds: %w", err)
+	}
+
 	// doc is https://github.com/minio/minio/tree/master/pkg/madmin
-	minioAdminClient, err := madmin.New(minioServer.Spec.GetHostname(), minioServer.Spec.AccessKey, minioServer.Spec.SecretKey, minioServer.Spec.SSL)
+	minioAdminClient, err := madmin.New(minioServer.Spec.GetHostname(), serverCreds.AccessKey, serverCreds.SecretKey, minioServer.Spec.SSL)
 	if err != nil {
 		return reconcile.Result{}, fmt.Errorf("madmin.New: %w", err)
 	}

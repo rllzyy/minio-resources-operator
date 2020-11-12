@@ -1,3 +1,5 @@
+# deploy file for local skaffold devving
+
 ---
 # Source: minio-resources-operator/templates/service_account.yaml
 apiVersion: v1

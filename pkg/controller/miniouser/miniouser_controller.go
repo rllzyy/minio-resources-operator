@@ -98,20 +98,18 @@ func (r *ReconcileMinioUser) Reconcile(request reconcile.Request) (reconcile.Res
 		return reconcile.Result{}, fmt.Errorf("madmin.New: %w", err)
 	}
 
+	vaultCreds, err := vault.GetCredentials(instance.Name)
+	reqLogger.Info("Got user credentials")
+
 	reqLogger.Info("List all Minio users")
 	allUsers, err := minioAdminClient.ListUsers()
 	if err != nil {
 		return reconcile.Result{}, fmt.Errorf("minioAdminClient.ListUsers: %w", err)
 	}
 	reqLogger.Info("Got user list")
-	existingUser, isUserExists := allUsers[instance.Spec.AccessKey]
+	existingUser, isUserExists := allUsers[vaultCreds.AccessKey]
 
-	vaultCreds, err := vault.GetCredentials(instance.Name)
-	reqLogger = reqLogger.WithValues("Minio.AccessKey", vaultCreds.AccessKey)
-	reqLogger = reqLogger.WithValues("Minio.AccessKey", vaultCreds.SecretKey)
-	reqLogger.Info("Got user crdentials")
-
-	userPolicyName := fmt.Sprintf("_generator_%s", instance.Spec.AccessKey)
+	userPolicyName := fmt.Sprintf("_generator_%s", vaultCreds.AccessKey)
 	reqLogger = reqLogger.WithValues("Minio.Policy", userPolicyName)
 
 	reqLogger.Info("List all Minio policies")
@@ -132,7 +130,7 @@ func (r *ReconcileMinioUser) Reconcile(request reconcile.Request) (reconcile.Res
 			// that we can retry during the next reconciliation.
 			if isUserExists {
 				reqLogger.Info("Instance marked for deletion, remove Minio user")
-				if err = minioAdminClient.RemoveUser(instance.Spec.AccessKey); err != nil {
+				if err = minioAdminClient.RemoveUser(vaultCreds.AccessKey); err != nil {
 					return reconcile.Result{}, fmt.Errorf("minioAdminClient.RemoveUser: %w", err)
 				}
 				reqLogger.Info("Minio user removed")
@@ -213,7 +211,7 @@ func (r *ReconcileMinioUser) Reconcile(request reconcile.Request) (reconcile.Res
 
 	if !isUserExists {
 		reqLogger.Info("Create user")
-		if err = minioAdminClient.AddUser(instance.Spec.AccessKey, instance.Spec.SecretKey); err != nil {
+		if err = minioAdminClient.AddUser(vaultCreds.AccessKey, vaultCreds.SecretKey); err != nil {
 			return reconcile.Result{}, fmt.Errorf("minioAdminClient.AddUser: %w", err)
 		}
 		reqLogger.Info("User created")
@@ -221,14 +219,14 @@ func (r *ReconcileMinioUser) Reconcile(request reconcile.Request) (reconcile.Res
 
 	if isUserPolicy && (existingUser.PolicyName != userPolicyName || needCreate) {
 		reqLogger.Info("Set user policy")
-		if err = minioAdminClient.SetPolicy(userPolicyName, instance.Spec.AccessKey, false); err != nil {
+		if err = minioAdminClient.SetPolicy(userPolicyName, vaultCreds.AccessKey, false); err != nil {
 			return reconcile.Result{}, fmt.Errorf("minioAdminClient.SetPolicy: %w", err)
 		}
 		reqLogger.Info("User policy set")
 	}
 
 	reqLogger.Info("Set user secret key")
-	if err = minioAdminClient.SetUser(instance.Spec.AccessKey, instance.Spec.SecretKey, madmin.AccountEnabled); err != nil {
+	if err = minioAdminClient.SetUser(vaultCreds.AccessKey, vaultCreds.SecretKey, madmin.AccountEnabled); err != nil {
 		return reconcile.Result{}, fmt.Errorf("minioAdminClient.SetUser: %w", err)
 	}
 	reqLogger.Info("Secret key set, reconcilied")

@@ -31,21 +31,15 @@ spec:
         spec:
           description: MinioServerSpec defines the desired state of MinioServer
           properties:
-            accessKey:
-              type: string
             hostname:
               type: string
             port:
               type: integer
-            secretKey:
-              type: string
             ssl:
               type: boolean
           required:
-          - accessKey
           - hostname
           - port
-          - secretKey
           type: object
         status:
           description: MinioServerStatus defines the observed state of MinioServer

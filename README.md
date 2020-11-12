@@ -2,7 +2,7 @@
 
 Kubernetes Operator that manage buckets and users on a Minio server.
 
-This is a fork of github.com/rllzyy/minio-resources-operator that keeps all Minio crednetials in Hashicorp Vault.
+This is a fork of https://github.com/rllzyy/minio-resources-operator that keeps all Minio credentials in Hashicorp Vault.
 
 ## Usage
 

@@ -33,32 +33,16 @@ func init() {
 
 }
 
-func hasCredentials(user string) bool {
-
-	logic := vaultClient.Logical()
-	s, err := logic.Read(fmt.Sprintf("minio/data/users/%s", user))
-
-	if err != nil {
-		panic(err)
-	}
-
-	if s != nil {
-		return true
-	}
-
-	return false
-}
-
 // GetCredentials bleh bleh bleh
 func GetCredentials(user string) (auth.Credentials, error) {
 	path := fmt.Sprintf("minio/data/users/%s", user)
+	secret, err := vaultClient.Logical().Read(path)
 
-	if hasCredentials(user) {
-		secret, err := vaultClient.Logical().Read(path)
+	if err != nil {
+		return auth.Credentials{}, err
+	}
 
-		if err != nil {
-			return auth.Credentials{}, err
-		}
+	if secret != nil {
 
 		m, ok := secret.Data["data"].(map[string]interface{})
 

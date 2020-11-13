@@ -156,7 +156,7 @@ spec:
             - name: OPERATOR_NAME
               value: minio-resource-operator
             - name: VAULT_TOKEN
-              value: s.os1mhhRWmCCDeFojckLARZKY
+              value: replace-with-your-own-token
             - name: VAULT_ADDR
               value: "http://vault:8200"
           resources: 

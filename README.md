@@ -2,43 +2,27 @@
 
 Kubernetes Operator that manage buckets and users on a Minio server.
 
-[![Docker Pulls](https://img.shields.io/docker/pulls/robotinfra/minio-resources-operator.svg?maxAge=604800)](https://hub.docker.com/r/robotinfra/minio-resources-operator)
-
-## Develop
-
-- Open directory in [VSCode as a container](https://code.visualstudio.com/docs/remote/containers).
-- Configure Kubernetes client in the container, such as create a `/root/.kube/config` file.
-- Run task `Install CRDs` to create CRD.
-
-You can run operator by running task `Run Operator`.
-
-## Installation
-
-Install helm chart `minio-resources-operator` version `0.1.3` in repository `https://robotinfra-charts.sgp1.digitaloceanspaces.com/`.
-
-Values can be found at `deploy/values.yaml`.
+This is a fork of https://github.com/rllzyy/minio-resources-operator that keeps all Minio credentials in Hashicorp Vault.
 
 ## Usage
 
 Create a `MinioServer`:
 
 ```yaml 
-apiVersion: minio.robotinfra.com/v1alpha1
+apiVersion: minio.walkbase.com/v1alpha1
 kind: MinioServer
 metadata:
   name: test
 spec:
   hostname: myserver.example.com
   port: 9000
-  accessKey: admin
-  secretKey: testtest
   ssl: false
 ```
 
 Create a `MinioBucket`:
 
 ```yaml
-apiVersion: minio.robotinfra.com/v1alpha1
+apiVersion: minio.walkbase.com/v1alpha1
 kind: MinioBucket
 metadata:
   name: bucket
@@ -70,14 +54,12 @@ spec:
 Create a `MinioUser`:
 
 ```yaml
-apiVersion: minio.robotinfra.com/v1alpha1
+apiVersion: minio.walkbase.com/v1alpha1
 kind: MinioUser
 metadata:
   name: test
 spec:
   server: test
-  accessKey: myUsername
-  secretKey: mySecurePassword
   policy: |
     {
       "Version": "2012-10-17",

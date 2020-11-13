@@ -6,10 +6,8 @@ import (
 
 // MinioUserSpec defines the desired state of MinioUser
 type MinioUserSpec struct {
-	Server    string `json:"server"`
-	AccessKey string `json:"accessKey"`
-	SecretKey string `json:"secretKey"`
-	Policy    string `json:"policy,omitempty"`
+	Server string `json:"server"`
+	Policy string `json:"policy,omitempty"`
 }
 
 // MinioUserStatus defines the observed state of MinioUser

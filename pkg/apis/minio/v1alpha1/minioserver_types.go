@@ -6,11 +6,9 @@ import (
 
 // MinioServerSpec defines the desired state of MinioServer
 type MinioServerSpec struct {
-	Hostname  string `json:"hostname"`
-	Port      int    `json:"port"`
-	SSL       bool   `json:"ssl,omitempty"`
-	AccessKey string `json:"accessKey"`
-	SecretKey string `json:"secretKey"`
+	Hostname string `json:"hostname"`
+	Port     int    `json:"port"`
+	SSL      bool   `json:"ssl,omitempty"`
 }
 
 // MinioServerStatus defines the observed state of MinioServer

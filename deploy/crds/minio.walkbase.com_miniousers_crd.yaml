@@ -1,11 +1,9 @@
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
-  name: miniousers.minio.robotinfra.com
-  annotations:
-    "helm.sh/hook": crd-install
+  name: miniousers.minio.walkbase.com
 spec:
-  group: minio.robotinfra.com
+  group: minio.walkbase.com
   names:
     kind: MinioUser
     listKind: MinioUserList
@@ -33,17 +31,11 @@ spec:
         spec:
           description: MinioUserSpec defines the desired state of MinioUser
           properties:
-            accessKey:
-              type: string
             policy:
-              type: string
-            secretKey:
               type: string
             server:
               type: string
           required:
-          - accessKey
-          - secretKey
           - server
           type: object
         status:

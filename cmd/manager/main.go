@@ -22,9 +22,9 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 	"sigs.k8s.io/controller-runtime/pkg/manager/signals"
 
-	"github.com/robotinfra/minio-resources-operator/pkg/apis"
-	"github.com/robotinfra/minio-resources-operator/pkg/controller"
-	"github.com/robotinfra/minio-resources-operator/version"
+	"github.com/Walkbase/minio-resources-operator/pkg/apis"
+	"github.com/Walkbase/minio-resources-operator/pkg/controller"
+	"github.com/Walkbase/minio-resources-operator/version"
 )
 
 // Change below variables to serve metrics on different host or port.

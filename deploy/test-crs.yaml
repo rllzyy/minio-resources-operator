@@ -1,0 +1,82 @@
+apiVersion: minio.walkbase.com/v1alpha1
+kind: MinioServer
+metadata:
+  name: victim-minio
+spec:
+  hostname: victim-minio
+  port: 9000
+  ssl: false
+---
+apiVersion: minio.walkbase.com/v1alpha1
+kind: MinioUser
+metadata:
+  name: test-user
+spec:
+  server: victim-minio
+  policy: |
+    {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Action": [
+            "s3:*"
+          ],
+          "Effect": "Allow",
+          "Resource": [
+            "arn:aws:s3:::le-test-bucket/*",
+            "arn:aws:s3:::le-test-bucket"
+          ],
+          "Sid": ""
+        }
+      ]
+    }
+---
+apiVersion: minio.walkbase.com/v1alpha1
+kind: MinioUser
+metadata:
+  name: bdomars
+spec:
+  server: victim-minio
+  policy: |
+    {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Action": [
+            "s3:*"
+          ],
+          "Effect": "Allow",
+          "Resource": [
+            "arn:aws:s3:::*"
+          ],
+          "Sid": ""
+        }
+      ]
+    }
+---
+apiVersion: minio.walkbase.com/v1alpha1
+kind: MinioBucket
+metadata:
+  name: test-bucket
+spec:
+  name: le-test-bucket
+  server: victim-minio
+  policy: |
+    {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Action": [
+            "s3:GetObject"
+          ],
+          "Effect": "Allow",
+          "Principal": {
+            "AWS": ["*"]
+          },
+          "Resource": [
+            "arn:aws:s3:::le-test-bucket/*"
+          ],
+          "Sid": ""
+        }
+      ]
+    }

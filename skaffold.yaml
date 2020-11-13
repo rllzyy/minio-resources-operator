@@ -1,0 +1,13 @@
+apiVersion: skaffold/v2beta9
+kind: Config
+metadata:
+  name: minio-resources-operator
+build:
+  artifacts:
+  - image: example.com/wb/minio-resources-operator
+    custom:
+      buildCommand: "operator-sdk build $IMAGE"
+deploy:
+  kubectl:
+    manifests:
+    - deploy.yaml

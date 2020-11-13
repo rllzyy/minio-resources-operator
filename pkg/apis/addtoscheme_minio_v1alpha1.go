@@ -1,7 +1,7 @@
 package apis
 
 import (
-	"github.com/robotinfra/minio-resources-operator/pkg/apis/minio/v1alpha1"
+	"github.com/Walkbase/minio-resources-operator/pkg/apis/minio/v1alpha1"
 )
 
 func init() {

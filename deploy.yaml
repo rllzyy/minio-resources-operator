@@ -1,9 +1,11 @@
+# deploy file for local skaffold devving
+
 ---
 # Source: minio-resources-operator/templates/service_account.yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: minio-resource-operator
+  name: minio-resources-operator
   labels:
     app: minio-resources-operator
 imagePullSecrets: 
@@ -13,7 +15,7 @@ imagePullSecrets:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: minio-resource-operator
+  name: minio-resources-operator
   labels:
     app: minio-resources-operator
 rules:
@@ -100,21 +102,21 @@ rules:
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: minio-resource-operator
+  name: minio-resources-operator
 subjects:
   - kind: ServiceAccount
-    name: minio-resource-operator
+    name: minio-resources-operator
     namespace: default
 roleRef:
   kind: ClusterRole
-  name: minio-resource-operator
+  name: minio-resources-operator
   apiGroup: rbac.authorization.k8s.io
 ---
 # Source: minio-resources-operator/templates/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: minio-resource-operator
+  name: minio-resources-operator
   labels:
     app: minio-resources-operator
 spec:
@@ -126,11 +128,11 @@ spec:
   replicas: 1
   template:
     metadata:
-      name: minio-resource-operator
+      name: minio-resources-operator
       labels:
         app: minio-resources-operator
     spec:
-      serviceAccountName: minio-resource-operator
+      serviceAccountName: minio-resources-operator
       containers:
         - name: operator
           image: "example.com/wb/minio-resources-operator:v0.3.7"
@@ -154,7 +156,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
             - name: OPERATOR_NAME
-              value: minio-resource-operator
+              value: minio-resources-operator
             - name: VAULT_TOKEN
               value: replace-with-your-own-token
             - name: VAULT_ADDR

@@ -2,9 +2,13 @@ package miniobucket
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"reflect"
 
-	"github.com/minio/minio-go"
+	"github.com/minio/minio-go/v7"
+	"github.com/minio/minio-go/v7/pkg/credentials"
+	"github.com/minio/minio-go/v7/pkg/lifecycle"
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -19,6 +23,10 @@ import (
 	miniov1alpha1 "github.com/robotinfra/minio-resources-operator/pkg/apis/minio/v1alpha1"
 	"github.com/robotinfra/minio-resources-operator/pkg/utils"
 )
+
+type JsonConfig struct {
+	Rules []lifecycle.Rule `json:"Rules"`
+}
 
 var log = logf.Log.WithName("controller_miniobucket")
 
@@ -88,19 +96,23 @@ func (r *ReconcileMinioBucket) Reconcile(request reconcile.Request) (reconcile.R
 
 	minioServer := &miniov1alpha1.MinioServer{}
 	if err := r.client.Get(context.TODO(), client.ObjectKey{
-		Name:      instance.Spec.Server,
+		Name: instance.Spec.Server,
 	}, minioServer); err != nil {
 		return reconcile.Result{}, fmt.Errorf("r.client.Get: %w", err)
 	}
 
-	// doc is https://github.com/minio/minio/tree/master/pkg/madmin
-	minioClient, err := minio.New(minioServer.Spec.GetHostname(), minioServer.Spec.AccessKey, minioServer.Spec.SecretKey, minioServer.Spec.SSL)
+	minioClient, err := minio.New(minioServer.Spec.GetHostname(), &minio.Options{
+		Creds:  credentials.NewStaticV4(minioServer.Spec.AccessKey, minioServer.Spec.SecretKey, ""),
+		Secure: minioServer.Spec.SSL,
+	})
 	if err != nil {
 		return reconcile.Result{}, fmt.Errorf("minio.New: %w", err)
 	}
 
+	ctx := context.Background()
+
 	reqLogger.Info("Check if Minio bucket exists")
-	bucketExist, err := minioClient.BucketExists(instance.Spec.Name)
+	bucketExist, err := minioClient.BucketExists(ctx, instance.Spec.Name)
 	if err != nil {
 		return reconcile.Result{}, fmt.Errorf("minioClient.BucketExists: %w", err)
 	}
@@ -115,7 +127,7 @@ func (r *ReconcileMinioBucket) Reconcile(request reconcile.Request) (reconcile.R
 			// that we can retry during the next reconciliation.
 			if bucketExist {
 				reqLogger.Info("Instance marked for deletion, remove Minio bucket")
-				if err = minioClient.RemoveBucket(instance.Spec.Name); err != nil {
+				if err = minioClient.RemoveBucket(ctx, instance.Spec.Name); err != nil {
 					return reconcile.Result{}, fmt.Errorf("minioClient.RemoveBucket: %w", err)
 				}
 				reqLogger.Info("Minio bucket removed")
@@ -150,9 +162,18 @@ func (r *ReconcileMinioBucket) Reconcile(request reconcile.Request) (reconcile.R
 		reqLogger.Info("Finalizer added")
 	}
 
+	lifecycleConfig := lifecycle.NewConfiguration()
+	if instance.Spec.ILM != "" {
+		var tmp JsonConfig
+		if err := json.Unmarshal([]byte(instance.Spec.ILM), &tmp); err != nil {
+			return reconcile.Result{}, fmt.Errorf("json.Unmarshal: %w", err)
+		}
+		lifecycleConfig.Rules = tmp.Rules
+	}
+
 	if bucketExist {
 		reqLogger.Info("Get bucket policy")
-		bucketPolicy, err := minioClient.GetBucketPolicy(instance.Spec.Name)
+		bucketPolicy, err := minioClient.GetBucketPolicy(ctx, instance.Spec.Name)
 		if err != nil {
 			return reconcile.Result{}, fmt.Errorf("minioClient.GetBucketPolicy: %w", err)
 		}
@@ -160,23 +181,48 @@ func (r *ReconcileMinioBucket) Reconcile(request reconcile.Request) (reconcile.R
 
 		if bucketPolicy != instance.Spec.Policy {
 			reqLogger.Info("Bucket policy is different, replace", "Spec.Name", instance.Spec.Name)
-			if err = minioClient.SetBucketPolicy(instance.Spec.Name, instance.Spec.Policy); err != nil {
+			if err = minioClient.SetBucketPolicy(ctx, instance.Spec.Name, instance.Spec.Policy); err != nil {
 				return reconcile.Result{}, fmt.Errorf("minioClient.SetBucketPolicy: %w", err)
 			}
 			reqLogger.Info("Bucket policy changed")
 		} else {
 			reqLogger.Info("Bucket policy is already correct")
 		}
+
+		reqLogger.Info("Get bucket lifecycle policy")
+		currentBucketLifecyclePolicy, err := minioClient.GetBucketLifecycle(ctx, instance.Spec.Name)
+		if err != nil {
+			errorResp, ok := err.(minio.ErrorResponse)
+			if !ok || (ok && errorResp.Code != "NoSuchLifecycleConfiguration") {
+				return reconcile.Result{}, fmt.Errorf("minioClient.GetBucketLifecycle: %w", err)
+			}
+		}
+		reqLogger.Info("Got bucket lifecycle policy")
+
+		if (currentBucketLifecyclePolicy == nil && instance.Spec.ILM != "") || (currentBucketLifecyclePolicy != nil && !reflect.DeepEqual(currentBucketLifecyclePolicy.Rules, lifecycleConfig.Rules)) {
+			reqLogger.Info("Bucket lifecycle policy is different, replace", "Spec.Name", instance.Spec.Name)
+			if err = minioClient.SetBucketLifecycle(ctx, instance.Spec.Name, lifecycleConfig); err != nil {
+				return reconcile.Result{}, fmt.Errorf("minioClient.SetBucketLifecycle: %w", err)
+			}
+			reqLogger.Info("Bucket lifecycle policy changed")
+		} else {
+			reqLogger.Info("Bucket lifecycle policy is already correct")
+		}
 	} else {
 		reqLogger.Info("Bucket don't exists, create")
-		if err = minioClient.MakeBucket(instance.Spec.Name, ""); err != nil {
+		if err = minioClient.MakeBucket(ctx, instance.Spec.Name, minio.MakeBucketOptions{}); err != nil {
 			return reconcile.Result{}, fmt.Errorf("minioClient.MakeBucket: %w", err)
 		}
 		reqLogger.Info("Bucket created, set policy", "Spec.Name", instance.Spec.Name)
-		if err = minioClient.SetBucketPolicy(instance.Spec.Name, instance.Spec.Policy); err != nil {
+		if err = minioClient.SetBucketPolicy(ctx, instance.Spec.Name, instance.Spec.Policy); err != nil {
 			return reconcile.Result{}, fmt.Errorf("minioClient.SetBucketPolicy: %w", err)
 		}
 		reqLogger.Info("Bucket policy set")
+
+		reqLogger.Info("Set Bucket Lifecycle", "Spec.Name", instance.Spec.Name)
+		if err = minioClient.SetBucketLifecycle(ctx, instance.Spec.Name, lifecycleConfig); err != nil {
+			return reconcile.Result{}, fmt.Errorf("minioClient.SetBucketLifecycle: %w", err)
+		}
 	}
 
 	reqLogger.Info("MinioBucket reconcilied")

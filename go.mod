@@ -7,11 +7,11 @@ require (
 	github.com/go-ini/ini v1.51.1 // indirect
 	github.com/minio/minio v0.0.0-20200121104658-e2b3c083aa46
 	github.com/minio/minio-go v6.0.14+incompatible
+	github.com/minio/minio-go/v7 v7.0.12 // indirect
 	github.com/operator-framework/operator-sdk v0.15.2
+	github.com/secure-io/sio-go v0.3.0 // indirect
 	github.com/spf13/pflag v1.0.5
-	golang.org/x/crypto v0.0.0-20200117160349-530e935923ad // indirect
-	golang.org/x/net v0.0.0-20200114155413-6afb5195e5aa // indirect
-	golang.org/x/sys v0.0.0-20200122134326-e047566fdf82 // indirect
+	golang.org/x/oauth2 v0.0.0-20190604053449-0f29369cfe45 // indirect
 	k8s.io/api v0.0.0
 	k8s.io/apimachinery v0.0.0
 	k8s.io/client-go v12.0.0+incompatible

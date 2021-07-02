@@ -37,6 +37,8 @@ spec:
               type: string
             policy:
               type: string
+            ilm:
+              type: string
             server:
               type: string
           required:

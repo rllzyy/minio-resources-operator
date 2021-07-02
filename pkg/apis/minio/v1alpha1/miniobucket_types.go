@@ -9,6 +9,7 @@ type MinioBucketSpec struct {
 	Server string `json:"server"`
 	Name   string `json:"name"`
 	Policy string `json:"policy,omitempty"`
+	ILM    string `json:"ilm,omitempty"`
 }
 
 // MinioBucketStatus defines the observed state of MinioBucket

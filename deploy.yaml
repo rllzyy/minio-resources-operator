@@ -135,7 +135,7 @@ spec:
       serviceAccountName: minio-resources-operator
       containers:
         - name: operator
-          image: "example.com/wb/minio-resources-operator:v0.3.7"
+          image: "registry.walkbase.com/minio-resources-operator:v0.4.0"
           imagePullPolicy: IfNotPresent
           command:
             - minio-resources-operator

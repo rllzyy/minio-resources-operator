@@ -1,0 +1,85 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  creationTimestamp: null
+  name: manager-role
+rules:
+- apiGroups:
+  - minio.walkbase.com
+  resources:
+  - miniobuckets
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - minio.walkbase.com
+  resources:
+  - miniobuckets/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - minio.walkbase.com
+  resources:
+  - miniobuckets/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - minio.walkbase.com
+  resources:
+  - minioservers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - minio.walkbase.com
+  resources:
+  - minioservers/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - minio.walkbase.com
+  resources:
+  - minioservers/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - minio.walkbase.com
+  resources:
+  - miniousers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - minio.walkbase.com
+  resources:
+  - miniousers/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - minio.walkbase.com
+  resources:
+  - miniousers/status
+  verbs:
+  - get
+  - patch
+  - update

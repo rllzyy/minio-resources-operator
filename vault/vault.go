@@ -6,7 +6,6 @@ import (
 	"os"
 
 	"github.com/hashicorp/vault/api"
-	"github.com/minio/minio/pkg/auth"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 )
 

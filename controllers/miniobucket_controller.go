@@ -31,7 +31,7 @@ import (
 	miniov1 "github.com/Walkbase/minio-resources-operator/api/v1"
 	"github.com/Walkbase/minio-resources-operator/utils"
 	"github.com/Walkbase/minio-resources-operator/vault"
-	"github.com/minio/minio-go"
+	minio "github.com/minio/minio-go"
 )
 
 // MinioBucketReconciler reconciles a MinioBucket object

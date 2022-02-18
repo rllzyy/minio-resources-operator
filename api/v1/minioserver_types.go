@@ -37,7 +37,7 @@ type MinioServerStatus struct {
 
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
-
+//+kubebuilder:resource:path=minioservers,scope=Cluster
 // MinioServer is the Schema for the minioservers API
 type MinioServer struct {
 	metav1.TypeMeta   `json:",inline"`

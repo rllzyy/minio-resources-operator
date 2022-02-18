@@ -1,0 +1,6 @@
+apiVersion: minio.walkbase.com/v1
+kind: MinioServer
+metadata:
+  name: minioserver-sample
+spec:
+  # TODO(user): Add fields here

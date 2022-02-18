@@ -6,4 +6,32 @@ plugins:
   scorecard.sdk.operatorframework.io/v2: {}
 projectName: minio-resources-operator
 repo: github.com/Walkbase/minio-resources-operator
+resources:
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: walkbase.com
+  group: minio
+  kind: MinioServer
+  path: github.com/Walkbase/minio-resources-operator/api/v1
+  version: v1
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: walkbase.com
+  group: minio
+  kind: MinioUser
+  path: github.com/Walkbase/minio-resources-operator/api/v1
+  version: v1
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: walkbase.com
+  group: minio
+  kind: MinioBucket
+  path: github.com/Walkbase/minio-resources-operator/api/v1
+  version: v1
 version: "3"

@@ -1,0 +1,20 @@
+# permissions for end users to view miniobuckets.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: miniobucket-viewer-role
+rules:
+- apiGroups:
+  - minio.walkbase.com
+  resources:
+  - miniobuckets
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - minio.walkbase.com
+  resources:
+  - miniobuckets/status
+  verbs:
+  - get

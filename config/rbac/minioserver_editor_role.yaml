@@ -1,0 +1,24 @@
+# permissions for end users to edit minioservers.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: minioserver-editor-role
+rules:
+- apiGroups:
+  - minio.walkbase.com
+  resources:
+  - minioservers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - minio.walkbase.com
+  resources:
+  - minioservers/status
+  verbs:
+  - get

@@ -25,18 +25,13 @@ import (
 
 // MinioBucketSpec defines the desired state of MinioBucket
 type MinioBucketSpec struct {
-	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
-
-	// Foo is an example field of MinioBucket. Edit miniobucket_types.go to remove/update
-	Foo string `json:"foo,omitempty"`
+	Server string `json:"server"`
+	Name   string `json:"name"`
+	Policy string `json:"policy,omitempty"`
 }
 
 // MinioBucketStatus defines the observed state of MinioBucket
-type MinioBucketStatus struct {
-	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
-}
+type MinioBucketStatus struct{}
 
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status

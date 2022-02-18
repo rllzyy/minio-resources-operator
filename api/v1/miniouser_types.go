@@ -25,11 +25,8 @@ import (
 
 // MinioUserSpec defines the desired state of MinioUser
 type MinioUserSpec struct {
-	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
-
-	// Foo is an example field of MinioUser. Edit miniouser_types.go to remove/update
-	Foo string `json:"foo,omitempty"`
+	Server string `json:"server"`
+	Policy string `json:"policy,omitempty"`
 }
 
 // MinioUserStatus defines the observed state of MinioUser

@@ -25,17 +25,14 @@ import (
 
 // MinioServerSpec defines the desired state of MinioServer
 type MinioServerSpec struct {
-	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
-
-	// Foo is an example field of MinioServer. Edit minioserver_types.go to remove/update
-	Foo string `json:"foo,omitempty"`
+	Hostname string `json:"hostname"`
+	Port     int    `json:"port"`
+	SSL      bool   `json:"ssl,omitempty"`
 }
 
 // MinioServerStatus defines the observed state of MinioServer
 type MinioServerStatus struct {
-	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
+	Online bool `json:"online"`
 }
 
 //+kubebuilder:object:root=true

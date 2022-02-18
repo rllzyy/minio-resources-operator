@@ -1,0 +1,9 @@
+domain: walkbase.com
+layout:
+- go.kubebuilder.io/v3
+plugins:
+  manifests.sdk.operatorframework.io/v2: {}
+  scorecard.sdk.operatorframework.io/v2: {}
+projectName: minio-resources-operator
+repo: github.com/Walkbase/minio-resources-operator
+version: "3"

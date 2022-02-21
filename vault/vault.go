@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/Walkbase/minio-resources-operator/auth"
 	"github.com/hashicorp/vault/api"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 )

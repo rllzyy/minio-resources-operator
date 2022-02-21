@@ -175,8 +175,6 @@ func (r *MinioBucketReconciler) Reconcile(ctx context.Context, request ctrl.Requ
 
 	reqLogger.Info("MinioBucket reconcilied")
 	return reconcile.Result{}, nil
-
-	return ctrl.Result{}, nil
 }
 
 // SetupWithManager sets up the controller with the Manager.

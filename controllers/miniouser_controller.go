@@ -64,7 +64,7 @@ func (r *MinioUserReconciler) Reconcile(ctx context.Context, request ctrl.Reques
 
 	// Fetch the MinioUser instance
 	instance := &miniov1.MinioUser{}
-	err := r.Get(context.TODO(), request.NamespacedName, instance)
+	err := r.Get(ctx, request.NamespacedName, instance)
 	if err != nil {
 		if errors.IsNotFound(err) {
 			return reconcile.Result{}, nil
@@ -74,7 +74,7 @@ func (r *MinioUserReconciler) Reconcile(ctx context.Context, request ctrl.Reques
 	}
 
 	minioServer := &miniov1.MinioServer{}
-	if err := r.Get(context.TODO(), types.NamespacedName{
+	if err := r.Get(ctx, types.NamespacedName{
 		Name: instance.Spec.Server,
 	}, minioServer); err != nil {
 		return reconcile.Result{}, fmt.Errorf("r.Get: %w", err)
@@ -98,7 +98,7 @@ func (r *MinioUserReconciler) Reconcile(ctx context.Context, request ctrl.Reques
 	reqLogger.Info("Got user credentials")
 
 	reqLogger.Info("List all Minio users")
-	allUsers, err := minioAdminClient.ListUsers()
+	allUsers, err := minioAdminClient.ListUsers(ctx)
 	if err != nil {
 		return reconcile.Result{}, fmt.Errorf("minioAdminClient.ListUsers: %w", err)
 	}
@@ -109,7 +109,7 @@ func (r *MinioUserReconciler) Reconcile(ctx context.Context, request ctrl.Reques
 	reqLogger = reqLogger.WithValues("Minio.Policy", userPolicyName)
 
 	reqLogger.Info("List all Minio policies")
-	allPolicies, err := minioAdminClient.ListCannedPolicies()
+	allPolicies, err := minioAdminClient.ListCannedPolicies(ctx)
 	if err != nil {
 		return reconcile.Result{}, fmt.Errorf("minioAdminClient.ListCannedPolicies: %w", err)
 	}
@@ -126,7 +126,7 @@ func (r *MinioUserReconciler) Reconcile(ctx context.Context, request ctrl.Reques
 			// that we can retry during the next reconciliation.
 			if isUserExists {
 				reqLogger.Info("Instance marked for deletion, remove Minio user")
-				if err = minioAdminClient.RemoveUser(vaultCreds.AccessKey); err != nil {
+				if err = minioAdminClient.RemoveUser(ctx, vaultCreds.AccessKey); err != nil {
 					return reconcile.Result{}, fmt.Errorf("minioAdminClient.RemoveUser: %w", err)
 				}
 				reqLogger.Info("Minio user removed")
@@ -136,7 +136,7 @@ func (r *MinioUserReconciler) Reconcile(ctx context.Context, request ctrl.Reques
 
 			if isPolicyExists {
 				reqLogger.Info("Delete Minio canned policy")
-				if err = minioAdminClient.RemoveCannedPolicy(userPolicyName); err != nil {
+				if err = minioAdminClient.RemoveCannedPolicy(ctx, userPolicyName); err != nil {
 					return reconcile.Result{}, fmt.Errorf("minioAdminClient.RemoveCannedPolicy: %w", err)
 				}
 				reqLogger.Info("Minio policy removed")
@@ -148,7 +148,7 @@ func (r *MinioUserReconciler) Reconcile(ctx context.Context, request ctrl.Reques
 			// removed, the object will be deleted.
 			reqLogger.Info("Delete finalizer")
 			instance.SetFinalizers(utils.Remove(instance.GetFinalizers(), minioUserFinalizer))
-			if err = r.Update(context.TODO(), instance); err != nil {
+			if err = r.Update(ctx, instance); err != nil {
 				return reconcile.Result{}, fmt.Errorf("r.Update: %w", err)
 			}
 			reqLogger.Info("Finalizer deleted")
@@ -165,7 +165,7 @@ func (r *MinioUserReconciler) Reconcile(ctx context.Context, request ctrl.Reques
 	if !finalizerPresent {
 		reqLogger.Info("No finalizer, add it")
 		instance.SetFinalizers(append(instance.GetFinalizers(), minioUserFinalizer))
-		if err = r.Update(context.TODO(), instance); err != nil {
+		if err = r.Update(ctx, instance); err != nil {
 			return reconcile.Result{}, fmt.Errorf("r.Update: %w", err)
 		}
 		reqLogger.Info("Finalizer added")
@@ -176,7 +176,7 @@ func (r *MinioUserReconciler) Reconcile(ctx context.Context, request ctrl.Reques
 	if isPolicyExists {
 		if !isUserPolicy {
 			reqLogger.Info("Policy exists but unused, remove")
-			if err = minioAdminClient.RemoveCannedPolicy(userPolicyName); err != nil {
+			if err = minioAdminClient.RemoveCannedPolicy(ctx, userPolicyName); err != nil {
 				return reconcile.Result{}, fmt.Errorf("minioAdminClient.RemoveCannedPolicy: %w", err)
 			}
 			needCreate = false
@@ -186,7 +186,7 @@ func (r *MinioUserReconciler) Reconcile(ctx context.Context, request ctrl.Reques
 			if existingPolicy != instance.Spec.Policy {
 				reqLogger.Info("Policy key is different, recreate")
 				reqLogger.Info("Delete existing policy")
-				if err = minioAdminClient.RemoveCannedPolicy(userPolicyName); err != nil {
+				if err = minioAdminClient.RemoveCannedPolicy(ctx, userPolicyName); err != nil {
 					return reconcile.Result{}, fmt.Errorf("minioAdminClient.RemoveCannedPolicy: %w", err)
 				}
 				reqLogger.Info("Existing policy deleted")
@@ -199,7 +199,7 @@ func (r *MinioUserReconciler) Reconcile(ctx context.Context, request ctrl.Reques
 
 	if needCreate && isUserPolicy {
 		reqLogger.Info("Create new policy")
-		if err = minioAdminClient.AddCannedPolicy(userPolicyName, instance.Spec.Policy); err != nil {
+		if err = minioAdminClient.AddCannedPolicy(ctx, userPolicyName, []byte(instance.Spec.Policy)); err != nil {
 			return reconcile.Result{}, fmt.Errorf("minioAdminClient.AddCannedPolicy: %w", err)
 		}
 		reqLogger.Info("New policy created")
@@ -207,7 +207,7 @@ func (r *MinioUserReconciler) Reconcile(ctx context.Context, request ctrl.Reques
 
 	if !isUserExists {
 		reqLogger.Info("Create user")
-		if err = minioAdminClient.AddUser(vaultCreds.AccessKey, vaultCreds.SecretKey); err != nil {
+		if err = minioAdminClient.AddUser(ctx, vaultCreds.AccessKey, vaultCreds.SecretKey); err != nil {
 			return reconcile.Result{}, fmt.Errorf("minioAdminClient.AddUser: %w", err)
 		}
 		reqLogger.Info("User created")
@@ -215,14 +215,14 @@ func (r *MinioUserReconciler) Reconcile(ctx context.Context, request ctrl.Reques
 
 	if isUserPolicy && (existingUser.PolicyName != userPolicyName || needCreate) {
 		reqLogger.Info("Set user policy")
-		if err = minioAdminClient.SetPolicy(userPolicyName, vaultCreds.AccessKey, false); err != nil {
+		if err = minioAdminClient.SetPolicy(ctx, userPolicyName, vaultCreds.AccessKey, false); err != nil {
 			return reconcile.Result{}, fmt.Errorf("minioAdminClient.SetPolicy: %w", err)
 		}
 		reqLogger.Info("User policy set")
 	}
 
 	reqLogger.Info("Set user secret key")
-	if err = minioAdminClient.SetUser(vaultCreds.AccessKey, vaultCreds.SecretKey, madmin.AccountEnabled); err != nil {
+	if err = minioAdminClient.SetUser(ctx, vaultCreds.AccessKey, vaultCreds.SecretKey, madmin.AccountEnabled); err != nil {
 		return reconcile.Result{}, fmt.Errorf("minioAdminClient.SetUser: %w", err)
 	}
 	reqLogger.Info("Secret key set, reconcilied")

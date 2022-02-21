@@ -46,19 +46,16 @@ func GetCredentials(user string) (auth.Credentials, error) {
 	if secret != nil {
 
 		m, ok := secret.Data["data"].(map[string]interface{})
-
 		if !ok {
 			return auth.Credentials{}, errors.New("failed to read secret data")
 		}
 
 		accessKey, ok := m["accessKey"].(string)
-
 		if !ok {
 			return auth.Credentials{}, errors.New("no accesskey defined")
 		}
 
 		secretKey, ok := m["secretKey"].(string)
-
 		if !ok {
 			return auth.Credentials{}, errors.New("no secretkey defined")
 		}
@@ -73,7 +70,6 @@ func GetCredentials(user string) (auth.Credentials, error) {
 	}
 
 	creds, err := auth.GetNewCredentials()
-
 	if err != nil {
 		return auth.Credentials{}, err
 	}
@@ -85,7 +81,6 @@ func GetCredentials(user string) (auth.Credentials, error) {
 	}
 
 	_, err = vaultClient.Logical().Write(path, data)
-
 	if err != nil {
 		return auth.Credentials{}, err
 	}
@@ -106,19 +101,16 @@ func GetServerCredentials(server string) (auth.Credentials, error) {
 	if secret != nil {
 
 		m, ok := secret.Data["data"].(map[string]interface{})
-
 		if !ok {
 			return auth.Credentials{}, errors.New("failed to read secret data")
 		}
 
 		accessKey, ok := m["accessKey"].(string)
-
 		if !ok {
 			return auth.Credentials{}, errors.New("no accesskey defined")
 		}
 
 		secretKey, ok := m["secretKey"].(string)
-
 		if !ok {
 			return auth.Credentials{}, errors.New("no secretkey defined")
 		}
@@ -129,8 +121,6 @@ func GetServerCredentials(server string) (auth.Credentials, error) {
 		}
 
 		return creds, nil
-
 	}
-
 	return auth.Credentials{}, errors.New("no credentials for server")
 }

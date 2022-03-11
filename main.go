@@ -18,11 +18,12 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"os"
 
 	// Import all Kubernetes client auth plugins (e.g. Azure, GCP, OIDC, etc.)
 	// to ensure that exec-entrypoint and run can make use of them.
-	_ "k8s.io/client-go/plugin/pkg/client/auth"
+	//_ "k8s.io/client-go/plugin/pkg/client/auth"
 
 	"k8s.io/apimachinery/pkg/runtime"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
@@ -45,10 +46,13 @@ func init() {
 	utilruntime.Must(clientgoscheme.AddToScheme(scheme))
 
 	utilruntime.Must(miniov1.AddToScheme(scheme))
+	fmt.Println("noll")
 	//+kubebuilder:scaffold:scheme
 }
 
 func main() {
+
+	fmt.Println("hej")
 	var metricsAddr string
 	var enableLeaderElection bool
 	var probeAddr string
@@ -63,8 +67,6 @@ func main() {
 	opts.BindFlags(flag.CommandLine)
 	flag.Parse()
 
-	ctrl.SetLogger(zap.New(zap.UseFlagOptions(&opts)))
-
 	mgr, err := ctrl.NewManager(ctrl.GetConfigOrDie(), ctrl.Options{
 		Scheme:                 scheme,
 		MetricsBindAddress:     metricsAddr,
@@ -74,6 +76,7 @@ func main() {
 		LeaderElectionID:       "d7e231ac.walkbase.com",
 	})
 	if err != nil {
+		fmt.Println("ett")
 		setupLog.Error(err, "unable to start manager")
 		os.Exit(1)
 	}
@@ -83,6 +86,7 @@ func main() {
 		Scheme: mgr.GetScheme(),
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "MinioServer")
+		fmt.Println("två")
 		os.Exit(1)
 	}
 	if err = (&controllers.MinioUserReconciler{
@@ -90,6 +94,7 @@ func main() {
 		Scheme: mgr.GetScheme(),
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "MinioUser")
+		fmt.Println("tree")
 		os.Exit(1)
 	}
 	if err = (&controllers.MinioBucketReconciler{
@@ -97,22 +102,27 @@ func main() {
 		Scheme: mgr.GetScheme(),
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "MinioBucket")
+		fmt.Println("fyra")
 		os.Exit(1)
 	}
 	//+kubebuilder:scaffold:builder
 
 	if err := mgr.AddHealthzCheck("healthz", healthz.Ping); err != nil {
 		setupLog.Error(err, "unable to set up health check")
+		fmt.Println("fem")
 		os.Exit(1)
 	}
 	if err := mgr.AddReadyzCheck("readyz", healthz.Ping); err != nil {
 		setupLog.Error(err, "unable to set up ready check")
+		fmt.Println("seks")
 		os.Exit(1)
 	}
 
 	setupLog.Info("starting manager")
 	if err := mgr.Start(ctrl.SetupSignalHandler()); err != nil {
 		setupLog.Error(err, "problem running manager")
+		fmt.Println("sjuu")
 		os.Exit(1)
 	}
+	fmt.Println("hejdå")
 }

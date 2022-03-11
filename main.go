@@ -34,6 +34,7 @@ import (
 
 	miniov1 "github.com/Walkbase/minio-resources-operator/api/v1"
 	"github.com/Walkbase/minio-resources-operator/controllers"
+	"github.com/Walkbase/minio-resources-operator/vault"
 	//+kubebuilder:scaffold:imports
 )
 
@@ -44,15 +45,12 @@ var (
 
 func init() {
 	utilruntime.Must(clientgoscheme.AddToScheme(scheme))
-
 	utilruntime.Must(miniov1.AddToScheme(scheme))
-	fmt.Println("noll")
 	//+kubebuilder:scaffold:scheme
 }
 
 func main() {
 
-	fmt.Println("hej")
 	var metricsAddr string
 	var enableLeaderElection bool
 	var probeAddr string
@@ -66,6 +64,11 @@ func main() {
 	}
 	opts.BindFlags(flag.CommandLine)
 	flag.Parse()
+
+	err := vault.ConnectVault()
+	if err != nil {
+		setupLog.Error(err, "Failed to setup Vault connection")
+	}
 
 	mgr, err := ctrl.NewManager(ctrl.GetConfigOrDie(), ctrl.Options{
 		Scheme:                 scheme,

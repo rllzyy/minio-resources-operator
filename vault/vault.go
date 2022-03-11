@@ -3,34 +3,34 @@ package vault
 import (
 	"errors"
 	"fmt"
-	"os"
+
+	ctrl "sigs.k8s.io/controller-runtime"
 
 	"github.com/Walkbase/minio-resources-operator/auth"
 	"github.com/hashicorp/vault/api"
-	logf "sigs.k8s.io/controller-runtime/pkg/log"
 )
 
 var vaultClient *api.Client
-var log = logf.Log.WithName("vault")
+var log = ctrl.Log.WithName("vault")
 
-func init() {
+func ConnectVault() error {
 
-	var err error
-	vaultClient, err = api.NewClient(nil)
-
+	log.Info("Connecting vault....")
+	vaultClient, err := api.NewClient(nil)
 	if err != nil {
-		log.Error(err, err.Error())
-		os.Exit(2)
+		log.Error(err, "Failed to create Vault client")
+		return err
 	}
 
 	// Check that Vault is responsive (todo: better check?)
 	if health, err := vaultClient.Sys().Health(); err == nil {
 		log.Info("Vault initialized", "Vault.version", health.Version)
 	} else {
-		log.Error(err, "Failed communicating with Vault")
-		os.Exit(1)
+		log.Error(err, "Vault is unhealthy")
+		return err
 	}
 
+	return nil
 }
 
 // GetCredentials fetches minio credentails for a user from Vault or generates

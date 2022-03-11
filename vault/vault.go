@@ -15,7 +15,7 @@ var log = ctrl.Log.WithName("vault")
 
 func ConnectVault() error {
 
-	log.Info("Connecting vault....")
+	log.Info("Connecting to vault")
 	vaultClient, err := api.NewClient(nil)
 	if err != nil {
 		log.Error(err, "Failed to create Vault client")
@@ -24,7 +24,7 @@ func ConnectVault() error {
 
 	// Check that Vault is responsive (todo: better check?)
 	if health, err := vaultClient.Sys().Health(); err == nil {
-		log.Info("Vault initialized", "Vault.version", health.Version)
+		log.Info("Vault initialized and healthy", "Vault.version", health.Version)
 	} else {
 		log.Error(err, "Vault is unhealthy")
 		return err

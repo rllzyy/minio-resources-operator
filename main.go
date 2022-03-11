@@ -25,16 +25,16 @@ import (
 	// to ensure that exec-entrypoint and run can make use of them.
 	//_ "k8s.io/client-go/plugin/pkg/client/auth"
 
+	miniov1 "github.com/Walkbase/minio-resources-operator/api/v1"
+	"github.com/Walkbase/minio-resources-operator/controllers"
+	"github.com/Walkbase/minio-resources-operator/vault"
 	"k8s.io/apimachinery/pkg/runtime"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/healthz"
+	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
-
-	miniov1 "github.com/Walkbase/minio-resources-operator/api/v1"
-	"github.com/Walkbase/minio-resources-operator/controllers"
-	"github.com/Walkbase/minio-resources-operator/vault"
 	//+kubebuilder:scaffold:imports
 )
 
@@ -64,10 +64,13 @@ func main() {
 	}
 	opts.BindFlags(flag.CommandLine)
 	flag.Parse()
+	logger := zap.New(zap.UseFlagOptions(&opts))
+	logf.SetLogger(logger)
 
 	err := vault.ConnectVault()
 	if err != nil {
 		setupLog.Error(err, "Failed to setup Vault connection")
+		os.Exit(1)
 	}
 
 	mgr, err := ctrl.NewManager(ctrl.GetConfigOrDie(), ctrl.Options{

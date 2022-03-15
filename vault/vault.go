@@ -12,6 +12,7 @@ import (
 
 var vaultClient *api.Client
 var log = ctrl.Log.WithName("vault")
+var vaultPath = "minio"
 
 func ConnectVault() error {
 

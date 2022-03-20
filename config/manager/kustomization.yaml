@@ -13,4 +13,4 @@ kind: Kustomization
 images:
 - name: controller
   newName: registry.walkbase.com/library/minio-resources-operator
-  newTag: v2.0.0-dev1
+  newTag: v2.0.0-dev2

@@ -69,7 +69,7 @@ func main() {
 	logger := zap.New(zap.UseFlagOptions(&opts))
 	logf.SetLogger(logger)
 
-	err := vault.ConnectVault()
+	err := vault.ConnectVault(vaultPath)
 	if err != nil {
 		setupLog.Error(err, "Failed to setup Vault connection")
 		os.Exit(1)

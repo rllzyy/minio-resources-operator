@@ -14,10 +14,13 @@ var (
 	allCharSet     = lowerCharSet + upperCharSet + specialCharSet + numberSet
 )
 
+func init() {
+	rand.Seed(time.Now().Unix())
+}
+
 func generatePassword(passwordLength, minSpecialChar, minNum, minUpperCase int) string {
 	var password strings.Builder
 
-	rand.Seed(time.Now().Unix())
 	//Set special character
 	for i := 0; i < minSpecialChar; i++ {
 		random := rand.Intn(len(specialCharSet))
@@ -56,6 +59,6 @@ type Credentials struct {
 func GetNewCredentials() (Credentials, error) {
 	return Credentials{
 		AccessKey: generatePassword(16, 0, 4, 8),
-		SecretKey: generatePassword(16, 2, 4, 8),
+		SecretKey: generatePassword(32, 2, 2, 2),
 	}, nil
 }

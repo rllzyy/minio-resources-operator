@@ -3,4 +3,21 @@ kind: MinioUser
 metadata:
   name: miniouser-sample
 spec:
-  # TODO(user): Add fields here
+  server: minioserver-sample
+  policy: |
+    {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Action": [
+            "s3:*"
+          ],
+          "Effect": "Allow",
+          "Resource": [
+            "arn:aws:s3:::mybucket/*",
+            "arn:aws:s3:::mybucket"
+          ],
+          "Sid": ""
+        }
+      ]
+    }

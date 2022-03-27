@@ -3,4 +3,24 @@ kind: MinioBucket
 metadata:
   name: miniobucket-sample
 spec:
-  # TODO(user): Add fields here
+  name: miniobucket-sample
+  server: minioserver-sample
+  policy: |
+    {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Action": [
+            "s3:GetObject"
+          ],
+          "Effect": "Allow",
+          "Principal": {
+            "AWS": ["*"]
+          },
+          "Resource": [
+            "arn:aws:s3:::mybucket/*"
+          ],
+          "Sid": ""
+        }
+      ]
+    }

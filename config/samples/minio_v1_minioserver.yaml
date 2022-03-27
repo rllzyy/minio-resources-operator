@@ -3,4 +3,6 @@ kind: MinioServer
 metadata:
   name: minioserver-sample
 spec:
-  # TODO(user): Add fields here
+  hostname: minio.default.svc.cluster.local
+  port: 9000
+  ssl: false

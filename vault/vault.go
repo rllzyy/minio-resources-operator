@@ -44,6 +44,14 @@ func ConnectVault(vaultpath string) error {
 // GetCredentials fetches minio credentails for a user from Vault or generates
 // new ones and saves them to Vault if they do not yet exist.
 func GetCredentials(user string) (auth.Credentials, error) {
+
+	log.Info("Connecting to vault")
+	vaultClient, err := api.NewClient(nil)
+	if err != nil {
+		log.Error(err, "Failed to create Vault client")
+		return auth.Credentials{}, err
+	}
+
 	path := fmt.Sprintf("%sdata/users/%s", vaultPath, user)
 	secret, err := vaultClient.Logical().Read(path)
 
@@ -99,6 +107,14 @@ func GetCredentials(user string) (auth.Credentials, error) {
 
 // GetServerCredentials fetches minio credentials for a server from Vault
 func GetServerCredentials(server string) (auth.Credentials, error) {
+
+	log.Info("Connecting to vault")
+	vaultClient, err := api.NewClient(nil)
+	if err != nil {
+		log.Error(err, "Failed to create Vault client")
+		return auth.Credentials{}, err
+	}
+
 	path := fmt.Sprintf("%sdata/servers/%s", vaultPath, server)
 	secret, err := vaultClient.Logical().Read(path)
 

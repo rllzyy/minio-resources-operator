@@ -8,8 +8,9 @@ spec:
     spec:
       containers:
       - name: manager
+        imagePullPolicy: Always
         env:
           - name: VAULT_ADDR
             value: http://vault.default:8200/
           - name: VAULT_TOKEN
-            value: derp
+            value: s.TgfzLPO574M0vrS7NcQFkUFt

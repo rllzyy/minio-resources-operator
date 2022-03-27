@@ -1,4 +1,4 @@
 - op: add
   path: "/spec/template/spec/containers/1/args/-"
   value:
-    --vault-path="derp/"
+    --vault-path=derp/

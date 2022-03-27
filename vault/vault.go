@@ -17,7 +17,7 @@ var vaultPath = "minio/"
 func ConnectVault(vaultpath string) error {
 
 	// set vaultPath and make sure it ends with a slash
-	if vaultpath[len(vaultpath)] == '/' {
+	if vaultpath[len(vaultpath)-1] == '/' {
 		vaultPath = vaultpath
 	} else {
 		vaultPath = vaultpath + "/"
